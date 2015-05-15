@@ -1,0 +1,13 @@
+{
+  "name": "wolkenkratzer",
+  "version": "1.0.0",
+  "description": "Liste von Wolkenkratzer mit Hoehenangaben",
+  "author": "Max Huhn, Yannik Huber, Oliver Haarmann",
+  "dependencies": {
+    "chalk": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Galinero/WBA2SS15HuhnHuberHaarmann.git"
+  }
+}

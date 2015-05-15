@@ -1,0 +1,9 @@
+{
+"name":"Login",
+"version":"0.0.1",
+"main":"server.js",
+"dependencies": {
+	"body-parser":"^1.7.0",
+	"express":"^4.8.7",
+}
+}

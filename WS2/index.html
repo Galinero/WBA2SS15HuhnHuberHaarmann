@@ -11,8 +11,10 @@
 					$.post("http://localhost:3000/login",{user: user, password: pass}, function(data){
 						if(data=='yes')
 							{
-								alert("success");
+								alert("Anmeldung erfolgreich!")
+								$.get("http://localhost:3000/los");
 							}
+						else alert("Anmeldung fehlgeschlagen!")
 					});
 				});
 			});
@@ -20,9 +22,10 @@
 	</head>
 	<body>
 		<h1> Login </h1>
-		<input type="TEXT" id="user" size="40"><br>
+		<input type="TEXT" id="user" size="40" placeholder="Benutzername"><br>
 		<input type="password" id="password" size="40"><br>
-		<input type="button" id="submit" value="login">
+		<input type="button" id="submit" value="login"><br><br>
+		<a href="/los">Registrieren</a>
 	</body>
 </html>
 

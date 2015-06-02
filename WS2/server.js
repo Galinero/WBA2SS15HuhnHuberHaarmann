@@ -14,7 +14,7 @@ var db = MongoClient.connect('mongodb://127.0.0.1:27017/shop', function(err, db)
 
 app.use(bodyParser.urlencoded());
 
-app.get('/', function(req, res){	
+app.get('/', function(req, res){
 	res.sendFile(__dirname + '/index.html');
 });
 
@@ -25,14 +25,26 @@ app.get('/los', function(req, res){
 app.post('/login', jsonParser, function(req, res){
 	var username=req.body.user;
 	var password=req.body.password;
-	
+
 	myCollection.findOne({user_name: username}, function(err, result){
+
+
 		if(err) throw err;
-		if(result.password == password){
-			console.log("Anmeldung erfolgreich!");
-			res.end("yes");
+
+		if(result == null){
+			console.log("Nope!");
+			res.end("no");
 		}
-		else {console.log("Falscher Name oder PW!"); res.end("no");}
+
+		else{
+
+			if(password == result.password){
+				console.log("Anmeldung erfolgreich!");
+				res.end("yes");
+			}
+
+			else {console.log("Falscher Name oder PW!"); res.end("no");}
+		}
 	});
 });
 
@@ -48,7 +60,7 @@ app.post('/login', jsonParser, function(req, res){
 });*/
 
 app.post("/anmelden", jsonParser, function(req, res){
-		
+
 	var name=req.body.name;
 	var nname=req.body.nname;
 	var stra=req.body.stra;
@@ -58,10 +70,10 @@ app.post("/anmelden", jsonParser, function(req, res){
 	var user_name=req.body.user;
 	var password=req.body.password;
 
-	
+
 	myCollection.insert({
 		"vorname" : name,
-		"nachname" : nname, 
+		"nachname" : nname,
 		"straße" : stra,
 		"nummer" : nr,
 		"plz" : plz,
@@ -84,7 +96,7 @@ app.post("/anmelden", jsonParser, function(req, res){
 });*/
 
 app.get('/users', function(req, res) {
-	myCollection.find().toArray(function(err, items){		
+	myCollection.find().toArray(function(err, items){
 		res.json(items);
 	});
 });

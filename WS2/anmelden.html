@@ -4,22 +4,23 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
 		<script>
 			$(document).ready(function(){
-				var name, nname, str, nr, std, plz, user, pass;
+				var vorname, nachname, strasse, nr, stadt, plz, user_name, password;
 				$("#submit").click(function(){
-					name=$("#vorname").val();
-					nname=$("#nachname").val();
-					stra=$("#strasse").val();
+					vorname=$("#vorname").val();
+					nachname=$("#nachname").val();
+					strasse=$("#strasse").val();
 					nr=$("#nr").val();
-					std=$("#stadt").val();
+					stadt=$("#stadt").val();
 					plz=$("#plz").val();
-					user=$("#user").val();
-					pass=$("#password").val();
-					$.post("http://localhost:3000/anmelden",{name: name, nname: nname, stra: stra, nr: nr, std: std, plz: plz, user: user, password: pass}, function(data){	
+					user_name=$("#user").val();
+					password=$("#password").val();
+					$.post("http://localhost:3000/anmelden",{vorname: vorname, nachname: nachname, strasse: strasse, nr: nr, stadt: stadt, plz: plz, user_name: user_name, password: password}, function(data){	
 						if(data=='yes')
 							{
 								alert("Registrierung abgeschlossen!");								
 								$.get("http://localhost:3000");
 							}
+						else { alert("Benutzername existiert bereits!"); }
 						});
 					});
 			});		

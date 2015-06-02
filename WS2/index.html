@@ -12,7 +12,8 @@
 						if(data=='yes')
 							{
 								alert("Anmeldung erfolgreich!")
-								$.get("http://localhost:3000/los");
+								window.location.href = "http://localhost:3000/los";
+								//$.get("http://localhost:3000/los");
 							}
 						else alert("Anmeldung fehlgeschlagen!")
 					});
@@ -28,4 +29,3 @@
 		<a href="/los">Registrieren</a>
 	</body>
 </html>
-

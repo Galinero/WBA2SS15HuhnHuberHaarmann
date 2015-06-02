@@ -32,7 +32,7 @@ app.post('/login', jsonParser, function(req, res){
 		if(err) throw err;
 
 		if(result == null){
-			console.log("Nope!");
+			console.log("Nutzer nicht vorhanden!");
 			res.end("no");
 		}
 
@@ -69,23 +69,27 @@ app.post("/anmelden", jsonParser, function(req, res){
 	var plz=req.body.plz;
 	var user_name=req.body.user;
 	var password=req.body.password;
+	var passwordwd=req.body.passwordwd;
 
-
-	myCollection.insert({
-		"vorname" : name,
-		"nachname" : nname,
-		"straße" : stra,
-		"nummer" : nr,
-		"plz" : plz,
-		"stadt" : std,
-		"user_name" : user_name,
-		"password" : password
-	}, function(err, doc){
-		if(err){res.send("Problem!!!!");}
-		else {
-			res.end("yes");
+	if(password==passwordwd){
+		myCollection.insert({
+			"vorname" : name,
+			"nachname" : nname,
+			"straße" : stra,
+			"nummer" : nr,
+			"plz" : plz,
+			"stadt" : std,
+			"user_name" : user_name,
+			"password" : password
+		}, function(err, doc){
+			if(err){res.send("Problem!!!!");}
+			else {
+				res.end("yes");
+			}
+		});
 		}
-	});
+		else{res.send("pw");}
+
 });
 
 	/*fs.writeFile('./'+user_name+'.json',"{\n\"vorname\":\""+name+"\",\n\"nachname\":\""+nname+"\",\n\"straße\":\""+stra+"\",\n\"nummer\":\""+nr+"\",\n\"stadt\":\""+std+"\",\n\"plz\":\""+plz+"\",\n\"user_name\":\""+user_name+"\",\n\"password\":\""+password+"\"\n}", function(err){

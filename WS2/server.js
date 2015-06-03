@@ -63,7 +63,10 @@ app.post("/anmelden", jsonParser, function(req, res){
 				if(err) res.send("Problem beim einfügen in Datenbank!");
 				else res.end("yes");
 			});}
-			else res.send("pw");
+			else {
+				console.log("Passwoerter stimmen nicht ueberein!!");
+				res.send("pw");
+			}
 		}
 	});
 });

@@ -31,37 +31,39 @@ app.post('/login', jsonParser, function(req, res){
 
 		if(err) throw err;
 
-		if(result == null){ 
-			console.log("Benutzer existiert nicht"); 
+		if(result == null){
+			console.log("Benutzer existiert nicht");
 			res.end("no");
 		}
-		else {		
+		else {
 			if(result.password == password){
 				console.log("Anmeldung erfolgreich "+result.vorname);
 				res.end("yes");
 			}
 			else {
-				console.log("Falsches Passwort!"); 
+				console.log("Falsches Passwort!");
 				res.end("no");
-			}		
+			}
 		}
 	});
 });
 
 app.post("/anmelden", jsonParser, function(req, res){
-	
+
 	var user=req.body;
         myCollection.findOne({user_name: user.user_name}, function(err, result){
 		if(err) throw err;
 		if(result != null) {
-			console.log("Benutzername existiert bereits!"); 
+			console.log("Benutzername existiert bereits!");
 			res.end("no");
 		}
-		else {	
+		else {
+			if(user.password==user.passwordwd){
 			myCollection.insert(user, function(err, doc){
 				if(err) res.send("Problem beim einfügen in Datenbank!");
 				else res.end("yes");
-			});
+			});}
+			else res.send("pw");
 		}
 	});
 });

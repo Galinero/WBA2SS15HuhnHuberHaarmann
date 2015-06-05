@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<title>Produkt hinzufuegen</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+		<script>
+			$(document).ready(function(){
+				var produkt, hersteller, preis, herkunft;
+
+
+        //var vorname, nachname, strasse, nr, stadt, plz, user_name, password;
+				$("#submit").click(function(){
+          produkt=$("#produkt").val();
+          hersteller=$("#firma").val();
+          preis=("#preis").val();
+          herkunft=("#herkunft").val();
+					/*vorname=$("#vorname").val();
+					nachname=$("#nachname").val();
+					strasse=$("#strasse").val();
+					nr=$("#nr").val();
+					stadt=$("#stadt").val();
+					plz=$("#plz").val();
+					user_name=$("#user").val();
+					password=$("#password").val();
+					passwordwd=$("#passwordwd").val();*/
+
+					$.post("http://localhost:3000/addproduct",{produkt: produkt, hersteller: hersteller, herkunft: herkunft, preis: preis}, function(data){
+
+
+
+					//$.post("http://localhost:3000/anmelden",{vorname: vorname, nachname: nachname, strasse: strasse, nr: nr, stadt: stadt, plz: plz, user_name: user_name, password: password, passwordwd: passwordwd}, function(data){
+
+						if(data=='yes')
+							{
+								alert("Produkt hinzugefügt!");
+								window.location.href = "http://localhost:3000/los";
+							}
+						else {
+							/*if(data=='pw') */alert("Fehler!!");
+							//else alert("Benutzername existiert bereits!"); }
+						});
+					});
+			});
+		</script>
+	</head>
+	<body>
+	<h1> Produkt hinzufuegen </h1>
+	<input type="text" id="produkt" size="40" placeholder="Produktname" required><br>
+	<input type="text" id="hersteller" size="40" placeholder="Hersteller" required><br>
+  <input type="text" id="herkunft" size="40" placeholder="Herkunftsland" required><br>
+  <input type="number" id="preis" size="8" step="0.01" min="0.01" placeholder="Einzelpreis" required><br>
+	<input type="button" id="submit" value="Registrieren">
+	<br><br><a href="/los">Produkt finden</a>
+	</body>
+</html>

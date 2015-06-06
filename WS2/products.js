@@ -28,16 +28,16 @@ app.get('/los', function(req, res){
 
 app.post("/addproduct", jsonParser, function(req, res){
 
-	var produkt=req.body;
+	var product=req.body;
 
-	myCollection.findOne({produkt: produkt.produkt}, function(err, result){
+	myCollection.findOne({produkt: product.produkt}, function(err, result){
 		if(err) throw err;
 		if(result != null) {
 			console.log("Produkt existiert bereits!");
 			res.end("no");
 		}
 		else {
-			myCollection.insert(produkt, function(err, doc){
+			myCollection.insert(product, function(err, doc){
 				if(err) res.send("Problem beim einfügen in Datenbank!");
 				else res.end("yes");
 			});

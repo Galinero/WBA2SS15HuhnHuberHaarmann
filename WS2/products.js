@@ -25,16 +25,21 @@ app.get('/los', function(req, res){
 	res.sendFile(__dirname + '/anmelden.html');
 });
 
+app.get('/psearch', function(req, res){
+	res.sendFile(__dirname + '/productsearch.html');
+});
+
 
 app.post("/addproduct", jsonParser, function(req, res){
 
 	var product=req.body;
+	if(product.produkt=="") res.end("leer");
 
 	myCollection.findOne({produkt: product.produkt}, function(err, result){
 		if(err) throw err;
 		if(result != null) {
 			console.log("Produkt existiert bereits!");
-			res.end("no");
+			res.end("existent");
 		}
 		else {
 			myCollection.insert(product, function(err, doc){
@@ -45,34 +50,38 @@ app.post("/addproduct", jsonParser, function(req, res){
 	});
 });
 
-	/*myCollection.insert(product, function(err, doc){
-		if(err) res.send("Problem beim einfügen in Datenbank!");
-		else res.end("yes");
-	});
-}*/
+app.post('/productsearch', jsonParser, function(req, res){
+	var produktname=req.body.produkt;
+	var herstellername=req.body.hersteller;
+	//var herkunft=req.body.hersteller;
+	//var preis=req.body.preis;
+	//var vorrat=req.body.vorrat;
 
-/*app.post("/anmelden", jsonParser, function(req, res){
+	myCollection.findOne({produkt: produktname}, function(err, result){
 
-	var user=req.body;
-        myCollection.findOne({user_name: user.user_name}, function(err, result){
 		if(err) throw err;
-		if(result != null) {
-			console.log("Benutzername existiert bereits!");
-			res.end("no");
+
+		if(result == null){
+			console.log("Produkt nicht gefunden");
+			res.end("produkt");
 		}
 		else {
-			if(user.password==user.passwordwd){
-			myCollection.insert(user, function(err, doc){
-				if(err) res.send("Problem beim einfügen in Datenbank!");
-				else res.end("yes");
-			});}
-			else {
-				console.log("Passwoerter stimmen nicht ueberein!!");
-				res.send("pw");
+			if(result.hersteller==herstellername){
+			//if(result.hersteller==herstellername){
+				console.log("Produkt gefunden: "+result.produkt);
+				res.end("yes");
 			}
+			else{
+				console.log("Hersteller nicht gefunden!");
+				res.end("hersteller");
+
+			}
+			//}
+			//res.end("produkt");
 		}
 	});
-});*/
+});
+
 
 app.listen(3000, function(){
 	console.log("Port 3000");

@@ -8,13 +8,12 @@
 				$("#submit").click(function(){
 					produkt=$("#produkt").val();
 					hersteller=$("#hersteller").val();
-					preis=$("#preis").val();
-					herkunft=$("#herkunft").val();
-					vorrat=$("#vorrat").val();
 
-					$.post("http://localhost:3000/productsearch",{produkt: produkt, hersteller: hersteller, herkunft: herkunft, preis: preis, vorrat: vorrat}, function(data){
+
+					$.post("http://localhost:3000/deleteproduct",{produkt: produkt, hersteller: hersteller}, function(data){
 						if(data=='yes'){
-								alert("Produkt gefunden!");
+								alert("Produkt geloescht!");
+								window.location.href = "http://localhost:3000/psearch";
 							}
 						else{
 							if(data=="hersteller") alert("Hersteller nicht gefunden!");
@@ -29,11 +28,8 @@
 		<h1> Produktsuche </h1>
 		<input type="text" id="produkt" size="40" placeholder="Produktname"><br>
 		<input type="text" id="hersteller" size="40" placeholder="Hersteller"><br>
-		<input type="text" id="herkunft" size="40" placeholder="Herkunftsland"><br>
-		<input type="radio" name=vorrat id="vorrat" value="lager">Auf Lager<br>
-		<input type="radio" name=vorrat id="vorrat" value="nlager">Nicht vorraetig<br>
-		<input type="button" id="submit" value="Suchen"><br>
+		<input type="button" id="submit" value="Loeschen!"><br>
 		<br><br><a href="/">Produkt hinzufuegen</a>
-		<br><a href="/dproduct">Produkt loeschen</a>
+		<br><a href="/psearch">Produkt finden</a>
 	</body>
 </html>

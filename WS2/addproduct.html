@@ -7,7 +7,7 @@
 				var produkt, hersteller, preis, herkunft, vorrat;
   				$("#submit").click(function(){
           				produkt=$("#produkt").val();
-          				hersteller=$("#firma").val();
+          				hersteller=$("#hersteller").val();
           				preis=$("#preis").val();
           				herkunft=$("#herkunft").val();
 									vorrat=$("#vorrat").val();
@@ -39,5 +39,6 @@
 	<input type="radio" name=vorrat id="vorrat" value="nlager" required>Nicht vorraetig<br>
 	<input type="button" id="submit" value="Hinzufuegen">
 	<br><br><a href="/psearch">Produkt finden</a>
+	<br><a href="/dproduct">Produkt loeschen</a>
 	</body>
 </html>

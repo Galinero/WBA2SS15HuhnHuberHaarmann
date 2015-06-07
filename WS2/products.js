@@ -29,6 +29,9 @@ app.get('/psearch', function(req, res){
 	res.sendFile(__dirname + '/productsearch.html');
 });
 
+app.get('/dproduct', function(req, res){
+	res.sendFile(__dirname + '/deleteproduct.html');
+});
 
 app.post("/addproduct", jsonParser, function(req, res){
 
@@ -67,7 +70,6 @@ app.post('/productsearch', jsonParser, function(req, res){
 		}
 		else {
 			if(result.hersteller==herstellername){
-			//if(result.hersteller==herstellername){
 				console.log("Produkt gefunden: "+result.produkt);
 				res.end("yes");
 			}
@@ -76,12 +78,38 @@ app.post('/productsearch', jsonParser, function(req, res){
 				res.end("hersteller");
 
 			}
-			//}
-			//res.end("produkt");
+
 		}
 	});
 });
 
+app.post('/deleteproduct', jsonParser, function(req, res){
+	var produktname=req.body.produkt;
+	var herstellername=req.body.hersteller;
+
+	myCollection.findOne({produkt: produktname}, function(err, result){
+
+		if(err) throw err;
+
+		if(result == null){
+			console.log("Produkt nicht gefunden");
+			res.end("produkt");
+		}
+		else {
+			if(result.hersteller==herstellername){
+				//myCollection.remove({'title: result'})
+				myCollection.remove({'produkt':'result.produkt', 'hersteller':'result.hersteller'});
+				console.log("Produkt geloescht: "+result.produkt);
+				res.end("yes");
+			}
+			else{
+				console.log("Hersteller nicht gefunden!");
+				res.end("hersteller");
+			}
+
+		}
+	});
+});
 
 app.listen(3000, function(){
 	console.log("Port 3000");

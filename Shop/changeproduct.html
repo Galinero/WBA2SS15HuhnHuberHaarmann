@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<title>Produkt aendern</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+		<script>
+			$(document).ready(function(){
+				var produkt, nprodukt, hersteller, preis, herkunft, vorrat;
+  				$("#submit").click(function(){
+          				produkt=$("#produkt").val();
+					nprodukt=$("#nprodukt").val();          				
+					hersteller=$("#hersteller").val();
+          				preis=$("#preis").val();
+          				herkunft=$("#herkunft").val();
+					vorrat=$("#vorrat").val();
+
+					$.post("http://localhost:3000/changeproduct",{produkt: produkt, nprodukt: nprodukt, hersteller: hersteller, herkunft: herkunft, preis: preis, vorrat: vorrat}, function(data){
+
+						if(data=='yes')
+							{
+								alert("Produkt geaendert!");
+								window.location.href = "http://localhost:3000/admin";
+							}
+						else {
+							if(data =='notexistent') alert("Produkt existiert nicht!");
+							if(data =='leer') alert("Leere Eingabe!");
+							if(data=="hersteller") alert("Hersteller nicht gefunden!");
+						}
+					});
+
+				});
+			});
+		</script>
+	</head>
+	<body>
+	<h1> Produkt aendern </h1>
+	<input type="text" id="produkt" size="40" placeholder="Produktname" required><br>
+	<input type="text" id="nprodukt" size="40" placeholder="Produktname neu" required><br>
+	<input type="text" id="hersteller" size="40" placeholder="Hersteller" required><br>
+	<input type="text" id="herkunft" size="40" placeholder="Herkunftsland" required><br>
+	<input type="number" id="preis" size="8" step="0.01" min="0.01" placeholder="Einzelpreis" required><br>
+	<input type="radio" name=vorrat id="vorrat" value="Auf Lager" required>Auf Lager<br>
+	<input type="radio" name=vorrat id="vorrat" value="Nicht vorraetig" required>Nicht vorraetig<br>
+	<input type="button" id="submit" value="Aendern">
+	<br><br><a href="/psearch">Produkt finden</a>
+	<br><a href="/dproduct">Produkt loeschen</a>
+	<br><a href="/psearch">Produkt finden</a>
+	</body>
+</html>

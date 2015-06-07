@@ -98,7 +98,7 @@ app.post('/deleteproduct', jsonParser, function(req, res){
 		else {
 			if(result.hersteller==herstellername){
 				//myCollection.remove({'title: result'})
-				myCollection.remove({'produkt':'result.produkt', 'hersteller':'result.hersteller'});
+				myCollection.remove({'produkt':result.produkt});
 				console.log("Produkt geloescht: "+result.produkt);
 				res.end("yes");
 			}

@@ -13,8 +13,6 @@ var db = MongoClient.connect('mongodb://127.0.0.1:27017/shop', function(err, db)
 });
 
 
-
-
 app.use(bodyParser.urlencoded());
 
 app.get('/', function(req, res){
@@ -32,6 +30,11 @@ app.get('/psearch', function(req, res){
 app.get('/dproduct', function(req, res){
 	res.sendFile(__dirname + '/deleteproduct.html');
 });
+
+app.get('/cproduct', function(req, res){
+	res.sendFile(__dirname + '/changeproduct.html');
+});
+
 
 app.post("/addproduct", jsonParser, function(req, res){
 
@@ -53,6 +56,39 @@ app.post("/addproduct", jsonParser, function(req, res){
 	});
 });
 
+
+app.post("/changeproduct", jsonParser, function(req, res){
+
+	var product=req.body;
+	if(product.produkt=="") res.end("leer");
+
+	myCollection.findOne({produkt: product.produkt}, function(err, result){
+		if(err) throw err;
+		if(result == null) {
+			console.log("Produkt existiert nicht!");
+			res.end("notexistent");
+		}
+		else {
+			if(result.hersteller==product.hersteller){
+				myCollection.update({
+					'produkt':result.produkt},{$set:{
+						'herkunft':product.herkunft,
+						'hersteller':product.hersteller,
+						'preis':product.preis,
+						'vorrat':product.vorrat
+					}});
+
+				console.log("Produkt geaendert!");
+				res.end("yes");
+			}
+			else{
+				console.log("Hersteller nicht gefunden!");
+				res.end("hersteller");
+			}
+		}
+	});
+});
+
 app.post('/productsearch', jsonParser, function(req, res){
 	var produktname=req.body.produkt;
 	var herstellername=req.body.hersteller;
@@ -70,7 +106,7 @@ app.post('/productsearch', jsonParser, function(req, res){
 		}
 		else {
 			if(result.hersteller==herstellername){
-				console.log("Produkt gefunden: "+result.produkt);
+				console.log("Produkt gefunden: "+result.produkt+" "+result.hersteller+" "+result.herkunft+" "+result.preis+" "+result.vorrat);
 				res.end("yes");
 			}
 			else{
@@ -78,7 +114,6 @@ app.post('/productsearch', jsonParser, function(req, res){
 				res.end("hersteller");
 
 			}
-
 		}
 	});
 });

@@ -13,13 +13,21 @@
 					vorrat=$("#vorrat").val();
 
 					$.post("http://localhost:3000/productsearch",{produkt: produkt, hersteller: hersteller, herkunft: herkunft, preis: preis, vorrat: vorrat}, function(data){
-						if(data=='yes'){
-								alert("Produkt gefunden!");
-							}
+						//alert(data);
+						//if(data=="yes"){
+						//		alert("Produkt gefunden!");
+						//	}
+
+						//else{
+						if(data=="hersteller") alert("Hersteller nicht gefunden!");
 						else{
-							if(data=="hersteller") alert("Hersteller nicht gefunden!");
 							if(data=="produkt") alert("Produktname nicht gefunden!");
+							else alert(data);
 						}
+						//}
+						/*							if(data=="hersteller") alert("Hersteller nicht gefunden!");
+													if(data=="produkt") alert("Produktname nicht gefunden!");
+													else alert("asdfasd");*/
 					});
 				});
 			});
@@ -29,9 +37,9 @@
 		<h1> Produktsuche </h1>
 		<input type="text" id="produkt" size="40" placeholder="Produktname"><br>
 		<input type="text" id="hersteller" size="40" placeholder="Hersteller"><br>
-		<input type="text" id="herkunft" size="40" placeholder="Herkunftsland"><br>
+		<!--<input type="text" id="herkunft" size="40" placeholder="Herkunftsland"><br>
 		<input type="radio" name=vorrat id="vorrat" value="lager">Auf Lager<br>
-		<input type="radio" name=vorrat id="vorrat" value="nlager">Nicht vorraetig<br>
+		<input type="radio" name=vorrat id="vorrat" value="nlager">Nicht vorraetig<br>-->
 		<input type="button" id="submit" value="Suchen"><br>
 		<br><br><a href="/">Produkt hinzufuegen</a>
 		<br><a href="/dproduct">Produkt loeschen</a>

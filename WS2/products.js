@@ -107,7 +107,8 @@ app.post('/productsearch', jsonParser, function(req, res){
 		else {
 			if(result.hersteller==herstellername){
 				console.log("Produkt gefunden: "+result.produkt+" "+result.hersteller+" "+result.herkunft+" "+result.preis+" "+result.vorrat);
-				res.end("yes");
+				res.end("Produkt gefunden, Produkt: "+result.produkt+" Hersteller: "+result.hersteller+" Herkunft: "+result.herkunft+" Preis: "+result.preis+" Vorrat: "+result.vorrat);
+				//res.end("yes");
 			}
 			else{
 				console.log("Hersteller nicht gefunden!");

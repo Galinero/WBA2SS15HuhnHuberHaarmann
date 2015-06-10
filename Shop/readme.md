@@ -1,4 +1,4 @@
-# Aufgabe2
+# E-Commerce Backend (Node.js)
 
 ## Live URL
 <https://github.com/Galinero/WBA2SS15HuhnHuberHaarmann.git>

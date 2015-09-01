@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <title>Startseite Hochzeitsplaner</title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <script>
+    $( document ).ready(function() {
+      $( "#form1" ).submit(function( event ) {
+// Temporäre variabeln definieren
+var benutzer,passwort2,passwort3, name,vorname,tel;
+// Daten aus den Input-Feldern zwischenspeichern
+benutzer=$("#benutzer2").val();
+name=$("#name").val();
+passwort2=$("#pw2").val();
+passwort3=$("#pw3").val();
+tel=$("#tel").val();
+vorname=$("#vorname").val();
+// Object-Variable fürs übertragen der Nutzerdaten initialisieren
+var user = new Object();
+// speichern der Temporären Variablen in die Object-Variable user
+user.benutzer=benutzer;
+user.name=name;
+user.vorname=vorname;
+user.passwort2=passwort2;
+user.passwort3=passwort3;
+user.tel=tel;
+
+// Post-Request an den Dienstnutzer
+$.ajax({
+  host: "localhost",
+  port: 3001,
+  url: '/kunden',
+    dataType: 'json',
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify(user)
+});
+});
+
+$( "#form2" ).submit(function( event ) {
+  var passwort, benutzer;
+  benutzer=$("#pw1").val();
+  passwort=$("#pw1").val();
+  var user = new Object();
+  // speichern der Temporären Variablen in die Object-Variable user
+  user.benutzer=benutzer;
+  user.passwort=passwort;
+
+
+
+
+});
+});
+    </script>
+  </head>
+  <body>
+    <h1>Willkommen beim Hochzeitsplaner!</h1>
+
+    Einloggen:
+    <form id="form2">
+    Benutzer:
+    <input type="text" id="benutzer1">
+    Passwort:
+    <input type="password" id="pw1">
+    <input type="submit" id="sub1" value="Einloggen">
+    </form>
+
+    Registrieren:
+    <form id="form1" enctype="application/json">
+    Name:
+    <input type="text" id="name">
+    Vorname:
+    <input type="text" id="vorname">
+    Benutzer:
+    <input type="text" id="benutzer2">
+    Tel:
+    <input type="text" id="tel">
+    Passwort:
+    <input type="password" id="pw2">
+    Passwort bestätigen:
+    <input type="password" id="pw3">
+    <input type="submit" id="sub2" value="Registrieren">
+    </form>
+  </body>
+</html>

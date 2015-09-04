@@ -1,0 +1,110 @@
+<html>
+	<head>
+		<title>Produktaenderung</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+		<script type="text/javascript">
+
+
+		var produkt = '';
+
+			function feuer(){
+				var produkt;
+
+						produkt=$("#produkt").val();
+
+						var product = new Object();
+					  // speichern der Temporären Variablen in die Object-Variable user
+					  	product.produkt=produkt;
+
+				$.ajax({
+					  async: true,
+					  host: "localhost",
+					  port: 3001,
+					  url: '/produktsuche/admin',
+					  dataType: 'json',
+					  type: 'post',
+					  contentType: 'application/json',
+					  data: JSON.stringify(product),
+					  success: function(data){
+					  	if(data==201) alert("Produkt existiert nicht!");
+					  	else {
+								var neu = data.substr(1, data.length-2);
+								var id = neu._id;
+					  		alert("Produkt gefunden!");
+					  		//alert("Produktaenderung erfolgreich für ID:" +neu);
+					  		//window.location.href = 'http://localhost:3001/products/admin';
+					  	}
+					  }
+				});
+			};
+
+
+//Idee war: Erst suchen, aus Response Id zwischenspeichern und mit dieser id dann den put request an den server mit
+
+
+/*
+			function wasser(){
+				var produkt1, hersteller, preis, herkunft, vorrat, gekauft;
+
+						produkt1=$("#produkt1").val();
+						hersteller=$("#hersteller").val();
+						preis=$("#preis").val();
+						herkunft=$("#herkunft").val();
+						vorrat=$("#vorrat").val();
+
+						var product = new Object();
+					  // speichern der Temporären Variablen in die Object-Variable user
+					  	product.produkt=produkt1;
+					  	product.hersteller=hersteller;
+					  	product.preis=preis;
+							product.herkunft=herkunft;
+							product.vorrat=vorrat;
+							product.gekauft=0;
+
+
+
+				$.ajax({
+					  async: true,
+					  host: "localhost",
+					  port: 3001,
+					  url: '/products',
+					  dataType: 'json',
+					  type: 'put',
+					  contentType: 'application/json',
+					  data: JSON.stringify(product),
+					  success: function(data){
+					  	if(data==201) alert("Produkt existiert nicht!");
+					  	else {
+					  		var neu = data.substr(1, data.length-2);
+					  		alert("Produktaenderung erfolgreich für ID:" +neu);
+					  		window.location.href = 'http://localhost:3001/products/admin';
+					  	}
+					  }
+				});
+			};
+*/
+
+		</script>
+	</head>
+	<body>
+		<h1> Produkt suchen </h1>
+		<form id="form">
+			<input type="text" id="produkt" size="40" placeholder="Produktname" required><br>
+			<input type="submit" id="sub" value="Suchen" onClick="feuer();return false;"><br><br>
+		</form>
+
+<!--
+		<form id="form">
+			<br><br><input type="text" id="produkt1" size="40" placeholder="Produktname" required><br>
+			<input type="text" id="hersteller" size="40" placeholder=produkt.produkt required><br>
+			<input type="text" id="herkunft" size="40" placeholder="Herkunftsland" required><br>
+			<input type="number" id="preis" size="8" step="0.01" min="0.01" placeholder="Einzelpreis" required><br>
+			<input type="number" id="vorrat" size="8" step="1" placeholder="Vorrat" required><br>
+			<input type="number" id="gekauft" size="8" step="1" placeholder="Gekauft" required><br>
+
+
+			<input type="submit" id="sub" value="Registrieren" onClick="wasser();return false;"><br><br>
+		</form>-->
+		<a href="/products/admin">Produkte</a>
+	</body>
+</html>

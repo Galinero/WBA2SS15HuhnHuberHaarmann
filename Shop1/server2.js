@@ -318,6 +318,62 @@ app.get("/products/:id/basket/:pid", jsonParser, function(req, res, next){
 });
 
 
+app.post("/products", jsonParser, function(req, res, next){
+   var newProduct = req.body;
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/products",
+        method:"POST"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        console.log("register products");
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          console.log(chunk);
+          if(chunk=="Produkt existiert bereits!") res.end('201');
+          else res.end(JSON.stringify(chunk));
+          //res.end('200');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.write(JSON.stringify(newProduct));
+      console.log(JSON.stringify(newProduct));
+      externalRequest.end();
+});
+
+
+app.get("/produktregistrierung", function(req, res){
+  fs.readFile("./produktregistrierung.ejs", {encoding:"utf-8"}, function(err, filestring){
+    if(err){
+      throw err;
+    } else{
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/produktregistrierung",
+        method:"GET",
+        headers:{
+          accept:"text/plain"
+        }
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        externalResponse.on("data", function(chunk){
+          var html = ejs.render(filestring, chunk);
+          res.setHeader("content-type", "text/html");
+          res.writeHead(200);
+          res.write(html);
+          res.end();
+        });
+      });
+      externalRequest.end();
+    }
+  });
+});
+
 
 app.listen(3001, function(){
   console.log("Server listens on Port 3001");

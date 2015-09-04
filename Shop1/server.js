@@ -55,6 +55,10 @@ app.get('/registrierung', function(req ,res){
 	res.status(200).send("Registrierung");
 });
 
+app.get('/produktregistrierung', function(req ,res){
+	res.status(200).send("Produktregistrierung");
+});
+
 app.post('/login', jsonParser, function(req, res){
 	var username=req.body.benutzer;
 	var password=req.body.passwort;
@@ -185,11 +189,13 @@ app.post("/products", jsonParser, function(req, res){
 		else {
 			productCollection.insert(product, function(err, doc){
 				if(err) throw err;
-				res.status(200).send(product.produkt+" in Datenbank eingefuegt!");
+				res.status(200).send(product._id);
 			});
 		}
 	});
 });
+
+
 
 app.put("/products/:id", jsonParser, function(req, res){
 	var product=req.body;

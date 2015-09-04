@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<title>Produktregistrierung</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+		<script type="text/javascript">
+
+			function feuer(){
+				var produkt, hersteller, preis, herkunft, vorrat;
+
+						produkt=$("#produkt").val();
+						hersteller=$("#hersteller").val();
+						preis=$("#preis").val();
+						herkunft=$("#herkunft").val();
+						vorrat=$("#vorrat").val();
+
+						var product = new Object();
+					  // speichern der Temporären Variablen in die Object-Variable user
+					  	product.produkt=produkt;
+					  	product.hersteller=hersteller;
+					  	product.preis=preis;
+							product.herkunft=herkunft;
+							product.vorrat=vorrat;
+							product.gekauft=0;
+
+
+
+				$.ajax({
+					  async: true,
+					  host: "localhost",
+					  port: 3001,
+					  url: '/products',
+					  dataType: 'json',
+					  type: 'post',
+					  contentType: 'application/json',
+					  data: JSON.stringify(product),
+					  success: function(data){
+					  	if(data==201) alert("Produkt existiert bereits!");
+					  	else {
+					  		var neu = data.substr(1, data.length-2);
+					  		alert("Produktregistrierung erfolgreich! ID:" +neu);
+					  		window.location.href = 'http://localhost:3001/products/';
+					  	}
+					  }
+				});
+			};
+
+
+
+		</script>
+	</head>
+	<body>
+		<h1> Produkt registrieren </h1>
+		<form id="form">
+			<input type="text" id="produkt" size="40" placeholder="Produktname" required><br>
+			<input type="text" id="hersteller" size="40" placeholder="Hersteller" required><br>
+			<input type="text" id="herkunft" size="40" placeholder="Herkunftsland" required><br>
+			<input type="number" id="preis" size="8" step="0.01" min="0.01" placeholder="Einzelpreis" required><br>
+			<input type="number" name=vorrat id="vorrat" value="Anzahl auf Lager" required><br>
+
+			<input type="submit" id="sub" value="Registrieren" onClick="feuer();return false;"><br><br>
+		</form>
+		<a href="/products">Produkte</a>
+	</body>
+</html>

@@ -46,8 +46,13 @@ app.param('pid', function(req, res, next, pid) {
 	req.pid = new ObjectId(pid);
 	next();
 });
+
 app.get('/', function(req ,res){
 	res.status(200).send("Startseite");
+});
+
+app.get('/registrierung', function(req ,res){
+	res.status(200).send("Registrierung");
 });
 
 app.post('/login', jsonParser, function(req, res){
@@ -77,6 +82,9 @@ app.post('/login', jsonParser, function(req, res){
 		}
 	});
 });
+
+
+
 
 
 app.post("/users", jsonParser, function(req, res){

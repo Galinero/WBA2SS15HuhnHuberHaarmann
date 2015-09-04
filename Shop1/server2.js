@@ -107,10 +107,62 @@ app.get("/users/:id", function(req, res, next){
 });
 
 
+app.get("/registrierung", function(req, res){
+  fs.readFile("./registrierung.ejs", {encoding:"utf-8"}, function(err, filestring){
+    if(err){
+      throw err;
+    } else{
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/",
+        method:"GET",
+        headers:{
+          accept:"text/plain"
+        }
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        externalResponse.on("data", function(chunk){
+          var html = ejs.render(filestring, chunk);
+          res.setHeader("content-type", "text/html");
+          res.writeHead(200);
+          res.write(html);
+          res.end();
+        });
+      });
+      externalRequest.end();
+    }
+  });
+});
 
+app.post("/users", jsonParser, function(req, res, next){
+   var newUser = req.body;
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/users",
+        method:"POST"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        console.log("register user");
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          console.log(chunk);
+          if(chunk=="Nutzer existiert bereits!") res.end('201');
+          else res.end(JSON.stringify(chunk));
+          //res.end('200');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.write(JSON.stringify(newUser));
+      console.log(JSON.stringify(newUser));
+      externalRequest.end();
+});
 
-
-app.post("/users", function(req, res){
+/*app.post("/users", function(req, res){
     var newUser = req.body;
 
   fs.readFile("./users.ejs", {encoding:"utf-8"}, function(err, filestring){
@@ -146,6 +198,8 @@ app.post("/users", function(req, res){
     }
 });
 });
+*/
+
 
 app.get("/users", function(req, res, next){
   fs.readFile("./users.ejs", {encoding:"utf-8"}, function(err, filestring){
@@ -180,6 +234,8 @@ app.get("/users", function(req, res, next){
 });
 
 
+
+
 app.get("/products/:id", function(req, res, next){
   fs.readFile("./products.ejs", {encoding:"utf-8"}, function(err, filestring){
     if(err){
@@ -195,7 +251,7 @@ app.get("/products/:id", function(req, res, next){
         }
       }
       var externalRequest = http.request(options, function(externalResponse){
-        console.log("Connected kunden get");
+        console.log("show products");
         externalResponse.on("data", function(chunk){
           console.log(chunk);
           var products = JSON.parse(chunk);

@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<title>Registrierung</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+		<script type="text/javascript">
+
+			function feuer(){
+					  var passwort, benutzer, vorname, nachname, strasse, nr, stadt, user_name, passwort;
+						vorname=$("#vorname").val();
+						nachname=$("#nachname").val();
+
+						strasse=$("#strasse").val();
+						nr=$("#nr").val();
+						stadt=$("#stadt").val();
+						plz=$("#plz").val();
+						user_name=$("#user").val();
+						passwort=$("#password").val();
+
+						var user = new Object();
+					  // speichern der Temporären Variablen in die Object-Variable user
+					  user.benutzer=benutzer;
+					  user.passwort=passwort;
+
+						user.strasse=strasse;
+						user.nr=nr;
+						user.stadt=stadt;
+					  user.plz=plz;
+						user.user_name=user_name;
+
+				$.ajax({
+					  async: true,
+					  host: "localhost",
+					  port: 3001,
+					  url: '/users',
+					  dataType: 'json',
+					  type: 'post',
+					  contentType: 'application/json',
+					  data: JSON.stringify(user),
+					  success: function(data){
+					  	if(data==201) alert("Nutzer existiert bereits!");
+					  	else {
+					  		var neu = data.substr(1, data.length-2);
+					  		alert("Registrierung erfolgreich! ID:" +neu);
+					  		window.location.href = 'http://localhost:3001/products/' + neu;
+					  	}
+					  }
+				});
+			};
+
+
+
+		</script>
+	</head>
+	<body>
+		<h1> Logins </h1>
+		<form id="form">
+			<input type="TEXT" id="vorname" size="40" placeholder="Vorname" required><br>
+			<input type="text" id="nachname" size="40" placeholder="Nachname" required><br>
+			<input type="text" id="strasse" size="40" placeholder="Straße" required>
+			<input type="number" id="nr" size="4" placeholder="Nummer" required><br>
+			<input type="number" id="plz" size="7" placeholder="PLZ" required>
+			<input type="text" id="stadt" size="40" placeholder="Stadt" required><br>
+			<input type="text" id="user" size="40" placeholder="Benutzername" required><br>
+			<input type="password" id="password" size="40" placeholder="Passwort" required><br>
+			<input type="submit" id="sub" value="Registrieren" onClick="feuer();return false;"><br><br>
+		</form>
+		<a href="/start">Login</a>
+	</body>
+</html>

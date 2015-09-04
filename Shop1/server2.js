@@ -58,7 +58,6 @@ app.post("/login", jsonParser, function(req, res, next){
           else if(chunk=="admin") res.end('202');
           else if(chunk=="Falsches Passwort!") res.end('203');
           else res.end(JSON.stringify(chunk));
-          //res.end('200');
         });
       });
       externalRequest.on('error', function(e) {
@@ -218,9 +217,7 @@ app.get("/users", function(req, res, next){
       var externalRequest = http.request(options, function(externalResponse){
         console.log("get users:");
         externalResponse.on("data", function(chunk){
-          console.log(chunk);
           var users = JSON.parse(chunk);
-          console.log(users);
           var html = ejs.render(filestring, {users: users});
           res.setHeader("content-type", "text/html");
           res.writeHead(200);
@@ -253,9 +250,7 @@ app.get("/products/:id", function(req, res, next){
       var externalRequest = http.request(options, function(externalResponse){
         console.log("show products");
         externalResponse.on("data", function(chunk){
-          console.log(chunk);
           var products = JSON.parse(chunk);
-          console.log(products);
           var html = ejs.render(filestring, {products: products});
           res.setHeader("content-type", "text/html");
           res.writeHead(200);

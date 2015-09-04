@@ -3,7 +3,7 @@
 		<title>Login</title>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
 		<script type="text/javascript">
-			
+
 			function feuer(){
 					  var passwort, benutzer;
 					  benutzer=$("#user").val();
@@ -12,7 +12,7 @@
 					  // speichern der Temporären Variablen in die Object-Variable user
 					  user.benutzer=benutzer;
 					  user.passwort=passwort;
-				
+
 				$.ajax({
 					  async: true,
 					  host: "localhost",
@@ -35,8 +35,8 @@
 				});
 			};
 
-			
-			
+
+
 		</script>
 	</head>
 	<body>
@@ -46,6 +46,6 @@
 			<input type="password" id="password" size="40"><br>
 			<input type="submit" id="sub" value="login" onClick="feuer();return false;"><br><br>
 		</form>
-		<a href="/los">Registrieren</a>
+		<a href="/registrierung">Registrieren</a>
 	</body>
 </html>

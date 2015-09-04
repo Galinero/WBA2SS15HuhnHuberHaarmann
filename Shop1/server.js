@@ -55,7 +55,7 @@ app.get('/registrierung', function(req ,res){
 	res.status(200).send("Registrierung");
 });
 
-app.get('/produktregistrierung', function(req ,res){
+app.get('/produktregistrierung/admin', function(req ,res){
 	res.status(200).send("Produktregistrierung");
 });
 

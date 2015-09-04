@@ -346,7 +346,7 @@ app.post("/products", jsonParser, function(req, res, next){
 });
 
 
-app.get("/produktregistrierung", function(req, res){
+app.get("/produktregistrierung/admin", function(req, res){
   fs.readFile("./produktregistrierung.ejs", {encoding:"utf-8"}, function(err, filestring){
     if(err){
       throw err;
@@ -354,7 +354,7 @@ app.get("/produktregistrierung", function(req, res){
       var options = {
         host: "localhost",
         port: 3000,
-        path: "/produktregistrierung",
+        path: "/produktregistrierung/admin",
         method:"GET",
         headers:{
           accept:"text/plain"

@@ -292,7 +292,7 @@ app.delete('/products/:id', jsonParser, function(req, res){
 
 //Einkaufswagen verwalten
 
-app.get('/users/:id/basket/:pid', jsonParser, function(req, res){
+app.get('/products/:id/basket/:pid', jsonParser, function(req, res){
 	productCollection.findOne({_id: req.pid}, function(err, result){
 		if(err) throw err;
 		if(result == null) {
@@ -311,7 +311,7 @@ app.get('/users/:id/basket/:pid', jsonParser, function(req, res){
 	});
 });
 
-app.delete("/users/:id/basket/:pid", jsonParser, function(req, res){
+app.delete("/products/:id/basket/:pid", jsonParser, function(req, res){
 	productCollection.findOne({_id: req.pid}, function(err, result){
 		if(err) throw err;
 		if(result == null) res.status(404).send("Produkt existiert nicht!");
@@ -326,14 +326,14 @@ app.delete("/users/:id/basket/:pid", jsonParser, function(req, res){
 
 });
 
-app.delete("/users/:id/basket", jsonParser, function(req, res){
+app.delete("/products/:id/basket", jsonParser, function(req, res){
 	userCollection.update({_id: req.id}, {$set: {"basket": []}}, function(err, doc){
 				if(err) throw err;
 				res.status(200).send("Basket gelöscht!");
 			});
 });
 
-app.put('/users/:id/basket/:pid', jsonParser, function(req, res) {
+app.put('/products/:id/basket/:pid', jsonParser, function(req, res) {
 	var neu=req.body.anzahl;
 	if(neu != null){
 		userCollection.findOne({_id: req.id}, function(err, result){

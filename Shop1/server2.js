@@ -251,7 +251,7 @@ app.get("/products/:id", function(req, res, next){
         console.log("show products");
         externalResponse.on("data", function(chunk){
           var products = JSON.parse(chunk);
-          var html = ejs.render(filestring, {products: products});
+          var html = ejs.render(filestring, {products: products, id:req.params.id});
           res.setHeader("content-type", "text/html");
           res.writeHead(200);
           res.write(html);
@@ -291,6 +291,30 @@ app.get("/logic/:id", function(req, res, next){
       externalRequest.end();
     }
   });
+});
+
+app.get("/products/:id/basket/:pid", jsonParser, function(req, res, next){
+   
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/products/"+req.params.id+"/basket/"+req.params.pid,
+        method:"GET"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+  
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          console.log(chunk);
+          if(chunk=="Produkt existiert nicht") res.end('201');
+          else if(chunk=="yes") res.end('200');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.end();
 });
 
 

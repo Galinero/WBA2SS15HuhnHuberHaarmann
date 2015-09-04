@@ -294,7 +294,7 @@ app.get("/logic/:id", function(req, res, next){
 });
 
 app.get("/products/:id/basket/:pid", jsonParser, function(req, res, next){
-   
+
       var options = {
         host: "localhost",
         port: 3000,
@@ -302,7 +302,7 @@ app.get("/products/:id/basket/:pid", jsonParser, function(req, res, next){
         method:"GET"
       }
       var externalRequest = http.request(options, function(externalResponse){
-  
+
         externalResponse.setEncoding('utf8');
         externalResponse.on("data", function(chunk){
           console.log(chunk);
@@ -373,6 +373,65 @@ app.get("/produktregistrierung/admin", function(req, res){
     }
   });
 });
+
+
+app.get("/produktsuche/admin", function(req, res){
+  fs.readFile("./produktsuche.ejs", {encoding:"utf-8"}, function(err, filestring){
+    if(err){
+      throw err;
+    } else{
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/produktsuche/admin",
+        method:"GET",
+        headers:{
+          accept:"text/plain"
+        }
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        externalResponse.on("data", function(chunk){
+          var html = ejs.render(filestring, chunk);
+          res.setHeader("content-type", "text/html");
+          res.writeHead(200);
+          res.write(html);
+          res.end();
+        });
+      });
+      externalRequest.end();
+    }
+  });
+});
+
+
+app.post("/produktsuche/admin", jsonParser, function(req, res, next){
+   var changedProduct = req.body;
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/produktsuche/admin",
+        method:"POST"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        console.log("search product");
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          console.log(chunk);
+          if(chunk=="Produkt existiert nicht!") res.end('201');
+          else res.end(JSON.stringify(chunk));
+          //res.end('200');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.write(JSON.stringify(changedProduct));
+      console.log(JSON.stringify(changedProduct));
+      externalRequest.end();
+});
+
+
 
 
 app.listen(3001, function(){

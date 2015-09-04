@@ -59,6 +59,12 @@ app.get('/produktregistrierung/admin', function(req ,res){
 	res.status(200).send("Produktregistrierung");
 });
 
+
+app.get('/produktsuche/admin', function(req ,res){
+	res.status(200).send("Produktsuche");
+});
+
+
 app.post('/login', jsonParser, function(req, res){
 	var username=req.body.benutzer;
 	var password=req.body.passwort;
@@ -375,6 +381,28 @@ app.get('/logic', jsonParser, function(req,res) {
 			}
 		}
 		res.status(200).json(products);
+	});
+});
+
+
+app.post('/produktsuche/admin', jsonParser, function(req, res){
+	var produkt=req.body.produkt;
+
+	console.log("Suchen nach" +produkt);
+	productCollection.findOne({produkt: produkt}, function(err, result){
+
+
+		if(err) throw err;
+
+		if(result == null){
+
+			res.status(404).send("Produkt existiert nicht!");
+		}
+		else {
+				res.status(200).json(result);
+
+			}
+
 	});
 });
 

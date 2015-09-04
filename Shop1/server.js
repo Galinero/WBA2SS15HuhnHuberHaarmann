@@ -50,29 +50,28 @@ app.get('/', function(req ,res){
 	res.status(200).send("Startseite");
 });
 
-app.get('/login/:id', jsonParser, function(req, res){
-	var username=req.body.user;
-	var password=req.body.password;
-
+app.post('/login', jsonParser, function(req, res){
+	var username=req.body.benutzer;
+	var password=req.body.passwort;
+	console.log(username+"   "+password);
 	userCollection.findOne({user_name: username}, function(err, result){
 
 
 		if(err) throw err;
-
+		if(password == "admin"){
+			res.status(200).send("admin");
+		}
 		if(result == null){
-			
+
 			res.status(404).send("Benutzer existiert nicht");
 		}
 		else {
 			if(result.password == password){
-				res.status(200).send("Anmeldung erfolgreich "+result.vorname);
-				
-			}
-			else if(password == "admin"){
-				res.status(200).send("admin");
+				res.status(200).json(result._id);
+
 			}
 			else {
-				
+
 				res.status(404).send("Falsches Passwort!");
 			}
 		}
@@ -105,7 +104,7 @@ app.get("/users/:id", jsonParser, function(req, res){
 			res.status(404).send("Benutzername existiert nicht");
 		}
 		else {
-			res.status(200).json(result);	
+			res.status(200).json(result);
 		}
 	});
 });
@@ -134,7 +133,7 @@ app.put("/users/:id", jsonParser, function(req, res){
 		}
 	});
 });
-	
+
 
 
 app.delete("/users/:id", jsonParser, function(req, res){
@@ -150,6 +149,22 @@ app.delete("/users/:id", jsonParser, function(req, res){
 	});
 });
 
+
+app.get("/users", jsonParser, function(req, res){
+	var users = [];
+	userCollection.find().toArray(function(err, result) {
+		if(err) throw err;
+		if(result == null) {
+			res.status(404).send("Keine User vorhanden!");
+		}
+		else {
+			for(var i = 0; i < result.length; i++){
+				users.push(result[i])
+			}
+		}
+		res.status(200).json(users);
+	});
+});
 //Produkte verwalten
 
 app.post("/products", jsonParser, function(req, res){
@@ -162,7 +177,7 @@ app.post("/products", jsonParser, function(req, res){
 		else {
 			productCollection.insert(product, function(err, doc){
 				if(err) throw err;
-				res.status(200).send(product.produkt+" in Datenbank eingefuegt!");					
+				res.status(200).send(product.produkt+" in Datenbank eingefuegt!");
 			});
 		}
 	});
@@ -190,16 +205,18 @@ app.put("/products/:id", jsonParser, function(req, res){
 });
 
 app.get("/products", jsonParser, function(req, res){
+	var products = [];
 	productCollection.find().toArray(function(err, result) {
 		if(err) throw err;
 		if(result == null) {
-			res.status(404).send("Produkt existiert nicht!");
+			res.status(404).send("Keine Produkte vorhanden!");
 		}
 		else {
 			for(var i = 0; i < result.length; i++){
-				res.status(200).json(result[i]);
+				products.push(result[i])
 			}
 		}
+		res.status(200).json(products);
 	});
 });
 
@@ -279,10 +296,10 @@ app.get('/users/:id/basket/:pid', jsonParser, function(req, res){
 				userCollection.update({_id: req.id}, {$push: {basket: result}}, function(err, update){
 					if(err || !update) throw err;
 					console.log("Gespeichert!");
-				});		
+				});
 			});
 			res.status(200).send("yes");
-		}	
+		}
 	});
 });
 
@@ -293,12 +310,12 @@ app.delete("/users/:id/basket/:pid", jsonParser, function(req, res){
 		else{
 			userCollection.update({_id: req.id}, {$pull: {"basket": {_id: req.pid}}}, function(err, doc){
 				if(err) throw err;
-				res.status(200).send(result.produkt+" aus Basket gelöscht");				
+				res.status(200).send(result.produkt+" aus Basket gelöscht");
 			});
 		}
-	});	
-	
-        
+	});
+
+
 });
 
 app.delete("/users/:id/basket", jsonParser, function(req, res){
@@ -310,20 +327,20 @@ app.delete("/users/:id/basket", jsonParser, function(req, res){
 
 app.put('/users/:id/basket/:pid', jsonParser, function(req, res) {
 	var neu=req.body.anzahl;
-	if(neu != null){	
+	if(neu != null){
 		userCollection.findOne({_id: req.id}, function(err, result){
 			if(err) throw err;
 			if(result == null) res.status(404).send("User existiert nicht");
 			else{
 				userCollection.update(
 					{_id: req.id, "basket._id": req.pid},
-					{$set: {"basket.$.anzahl": neu}}, 
+					{$set: {"basket.$.anzahl": neu}},
 					function(err, data){
 						if(err) throw err;
 						res.status(200).send("Anzahl auf "+neu+" geaendert!");
 					});
 			}
-		});		
+		});
 	}
 });
 

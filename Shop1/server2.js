@@ -43,10 +43,6 @@ app.get("/start", function(req, res){
 
 app.post("/login", jsonParser, function(req, res, next){
    var test = req.body;
-   fs.readFile("products.ejs", {encoding:"utf-8"}, function(err, filestring){
-    if(err){
-      throw err;
-    } else{
       var options = {
         host: "localhost",
         port: 3000,
@@ -58,9 +54,11 @@ app.post("/login", jsonParser, function(req, res, next){
         externalResponse.setEncoding('utf8');
         externalResponse.on("data", function(chunk){
           console.log(chunk);
-          res.send(chunk);
-          //res.write("sfsgag");
-          res.end();
+          if(chunk=="Benutzer existiert nicht") res.end('201');
+          else if(chunk=="admin") res.end('202');
+          else if(chunk=="Falsches Passwort!") res.end('203');
+          else res.end(JSON.stringify(chunk));
+          //res.end('200');
         });
       });
       externalRequest.on('error', function(e) {
@@ -70,8 +68,6 @@ app.post("/login", jsonParser, function(req, res, next){
       externalRequest.write(JSON.stringify(test));
       console.log(JSON.stringify(test));
       externalRequest.end();
-    }
-});
 });
 
 
@@ -184,7 +180,7 @@ app.get("/users", function(req, res, next){
 });
 
 
-app.get("/products", function(req, res, next){
+app.get("/products/:id", function(req, res, next){
   fs.readFile("./products.ejs", {encoding:"utf-8"}, function(err, filestring){
     if(err){
       throw err;
@@ -199,7 +195,7 @@ app.get("/products", function(req, res, next){
         }
       }
       var externalRequest = http.request(options, function(externalResponse){
-        console.log("get products");
+        console.log("Connected kunden get");
         externalResponse.on("data", function(chunk){
           console.log(chunk);
           var products = JSON.parse(chunk);

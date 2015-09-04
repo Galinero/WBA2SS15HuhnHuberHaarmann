@@ -14,18 +14,20 @@
 						stadt=$("#stadt").val();
 						plz=$("#plz").val();
 						user_name=$("#user").val();
-						passwort=$("#password").val();
+						password=$("#password").val();
 
 						var user = new Object();
 					  // speichern der Temporären Variablen in die Object-Variable user
-					  user.benutzer=benutzer;
-					  user.passwort=passwort;
+					  	user.vorname=vorname;
+					  	user.nachname=nachname;
+					  	user.password=password;
 
 						user.strasse=strasse;
 						user.nr=nr;
 						user.stadt=stadt;
 					  user.plz=plz;
 						user.user_name=user_name;
+						user.basket=[];
 
 				$.ajax({
 					  async: true,

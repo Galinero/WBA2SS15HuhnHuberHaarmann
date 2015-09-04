@@ -352,6 +352,25 @@ app.put('/users/:id/basket/:pid', jsonParser, function(req, res) {
 	}
 });
 
+app.get('/:id/logic', jsonParser, function(req,res) {
+	var products = [];
+	var gross;
+	productCollection.find().toArray(function(err, result) {
+		if(err) throw err;
+		if(result == null) {
+			res.status(404).send("Keine Produkte vorhanden!");
+		}
+		else {
+			result.sort(function(a, b) {
+				return parseFloat(b.gekauft) - parseFloat(a.gekauft);
+			});
+			for(var i = 0; i < result.length; i++){
+				products.push(result[i]);
+			}
+		}
+		res.status(200).json(products);
+	});
+});
 
 app.listen(3000, function(){
 	console.log("Port 3000");

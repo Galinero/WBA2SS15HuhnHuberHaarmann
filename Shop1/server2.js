@@ -346,6 +346,7 @@ app.post("/products", jsonParser, function(req, res, next){
 });
 
 
+
 app.get("/produktregistrierung/admin", function(req, res){
   fs.readFile("./produktregistrierung.ejs", {encoding:"utf-8"}, function(err, filestring){
     if(err){
@@ -433,6 +434,36 @@ app.post("/produktsuche/admin", jsonParser, function(req, res, next){
 
 
 
+
+
+
+
+app.put("/products/:id", jsonParser, function(req, res, next){
+   var changedProduct = req.body;
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/products"+req.param._id,
+        method:"PUT"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        console.log("change product");
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          console.log(chunk);
+          if(chunk=="Produkt existiert nicht!") res.end('201');
+          else res.end(JSON.stringify(chunk));
+          //res.end('200');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.write(JSON.stringify(changedProduct));
+      console.log(JSON.stringify(changedProduct));
+      externalRequest.end();
+});
 
 app.listen(3001, function(){
   console.log("Server listens on Port 3001");

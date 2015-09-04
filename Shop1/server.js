@@ -399,7 +399,7 @@ app.post('/produktsuche/admin', jsonParser, function(req, res){
 			res.status(404).send("Produkt existiert nicht!");
 		}
 		else {
-				res.status(200).json(result);
+				res.status(200).json(result._id);
 
 			}
 

@@ -263,6 +263,37 @@ app.get("/products/:id", function(req, res, next){
   });
 });
 
+app.get("/logic/:id", function(req, res, next){
+  fs.readFile("./products.ejs", {encoding:"utf-8"}, function(err, filestring){
+    if(err){
+      throw err;
+    } else{
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/logic",
+        method:"GET",
+        headers:{
+          accept:"application/json"
+        }
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        console.log("get logic:");
+        externalResponse.on("data", function(chunk){
+          var products = JSON.parse(chunk);
+          var html = ejs.render(filestring, {products: products});
+          res.setHeader("content-type", "text/html");
+          res.writeHead(200);
+          res.write(html);
+          res.end();
+        });
+      });
+      externalRequest.end();
+    }
+  });
+});
+
+
 
 app.listen(3001, function(){
   console.log("Server listens on Port 3001");

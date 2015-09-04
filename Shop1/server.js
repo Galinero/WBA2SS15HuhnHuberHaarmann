@@ -98,7 +98,7 @@ app.post("/users", jsonParser, function(req, res){
 		else {
 			userCollection.insert(user, function(err, doc){
 				if(err) throw err;
-				res.status(200).json(user);
+				res.status(200).json(user._id);
 			});
 		}
 	});
@@ -352,7 +352,7 @@ app.put('/users/:id/basket/:pid', jsonParser, function(req, res) {
 	}
 });
 
-app.get('/:id/logic', jsonParser, function(req,res) {
+app.get('/logic', jsonParser, function(req,res) {
 	var products = [];
 	var gross;
 	productCollection.find().toArray(function(err, result) {

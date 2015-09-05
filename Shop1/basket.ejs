@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title><%= user.vorname %></title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+    <script type="text/javascript">
+      function ref() {
+        window.location.href = "./basket";
+        return true;
+      }
+    </script>
+   
+  </head>
+  <body>
+    <h1>Warenkorb von Herr <%= user.nachname %></h1><br>
+    <input type="button" value="Seite aktualisieren" onCLick="ref();">
+     <ul>
+      <% for(var i = 0; i<user.basket.length;i++){
+          %>
+          <form action="basket/<%- user.basket[i]._id %>" method="POST" target="hiddenFrame">
+          <h2>Artikel <%= i+1 %> </h2>
+          <li><%= user.basket[i].produkt %></li>
+          <li><%= user.basket[i].herkunft %></li>
+          <li><%= user.basket[i].hersteller %></li>
+          <li><%= user.basket[i].preis %></li>
+          <input type="submit" value="aus Warenkorb entfernen" class="sub">
+          </form>
+          <%
+          }
+          %>
+    </ul>
+  <a href="http://localhost:3001/products/<%-user._id%>">Produkte</a>
+  <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
+  </body>
+</html>

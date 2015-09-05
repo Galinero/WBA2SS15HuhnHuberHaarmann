@@ -1,20 +1,73 @@
 <html>
   <head>
     <title><%= user.vorname %></title>
-         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+    <script type="text/javascript">
+            
+      function put() {
+        var u = new Object();
+        var id = <%- JSON.stringify(user._id) %>;
+        u.vorname=$("#vorname").val();
+        u.nachname=$("#nachname").val();
+        u.password= <%- JSON.stringify(user.password) %>;
+        u.strasse=$("#strasse").val();
+        u.nr=$("#nr").val();
+        u.stadt=$("#stadt").val();
+        u.plz=$("#plz").val();
+        u.user_name=$("#user").val();
+        
+        if(u.vorname == "") {
+          u.vorname = <%- JSON.stringify(user.vorname) %>;
+        }
+        if(u.nachname == "") {
+          u.nachname = <%- JSON.stringify(user.nachname) %>;
+        }
+        if(u.strasse == "") {
+          u.strasse = <%- JSON.stringify(user.strasse) %>;
+        }
+        if(u.nr == "") {
+          u.nr = <%- JSON.stringify(user.nr) %>;
+        }
+        if(u.stadt == "") {
+          u.stadt = <%- JSON.stringify(user.stadt) %>;
+        }
+        if(u.plz == "") {
+          u.plz = <%- JSON.stringify(user.plz) %>;
+        }
+        if(u.user_name == "") {
+          u.user_name = <%- JSON.stringify(user.user_name) %>;
+        }
+   
+        $.ajax({
+            host: "localhost",
+            port: 3001,
+            url: '/users/' + id,
+            dataType: 'json',
+            type: 'put',
+            contentType: 'application/json',
+            data: JSON.stringify(u),
+            success: function(data){
+              if(data==201) alert("User existiert nicht!");
+              else {
+                alert("Useränderung erfolgreich");
+                window.location.href = 'http://localhost:3001/users/' + id;
+              }
+            }
+        });
+      };
+    </script>
   </head>
   <body>
     <h1>Profil von Herr <%= user.nachname %></h1>
-    <ul>
-          <li><%= user.nachname %></li>
-          <li><%= user.nachname %></li>
-          <li><%= user.nachname %></li>
-    </ul>
-    <form>
-    Email:
-    <input type="text" id="email">
-    <input type="submit" id="sub1" value="Aendern">
-    </form>
+    <form id="form">
+          <%= user.vorname %><input type="text" id="vorname" size="20"><br>
+          <%= user.nachname %><input type="text" id="nachname" size="20"><br>
+         <%= user.strasse %>, <%= user.nr %><input type="text" id="strasse" size="20"><br><input type="text" id="nr" size="10"><br>
+          <%= user.plz %> <%= user.stadt %><input type="text" id="plz" size="10"><br><input type="text" id="stadt" size="10"><br>
+          <%= user.user_name%><input type="text" id="user" size="20"><br>
+          Passwort: ********
+          <%= JSON.stringify(user.basket[1].produkt)%>
+          <input type="submit" id="s" value="aktualisieren" onClick="put(); return false;">
+    </form>       
   </body>
 </html>

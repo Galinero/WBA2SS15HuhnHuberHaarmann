@@ -25,22 +25,23 @@
     </script>
   </head>
   <body>
+    <a href="<%- id%>/basket">Warenkorb</a><br><br>
     <h1>Produkte</h1>
     <ul>
       <% for(var i = 0; i<products.length;i++){
           %>
-          <form action="<%- id%>/basket/<%-products[i]._id%>" method="GET">
+          <form action="<%- id%>/basket/<%-products[i]._id%>" method="GET" target="hiddenFrame">
           <h2>Artikel <%= i+1 %> </h2>
           <li><%= products[i].produkt %></li>
           <li><%= products[i].herkunft %></li>
           <li><%= products[i].hersteller %></li>
           <li><%= products[i].preis %></li>
-          <li><%= products[i]._id %></li>
           <li><input type="submit" value="zum Warenkorb hinzufügen"></li>
           </form>
           <%
           }
           %>
     </ul>
+  <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
   </body>
 </html>

@@ -55,12 +55,12 @@ app.get('/registrierung', function(req ,res){
 	res.status(200).send("Registrierung");
 });
 
-app.get('/produktregistrierung/admin', function(req ,res){
+app.get('/admin/produktregistrierung', function(req ,res){
 	res.status(200).send("Produktregistrierung");
 });
 
 
-app.get('/produktsuche/admin', function(req ,res){
+app.get('/admin/produktsuche', function(req ,res){
 	res.status(200).send("Produktsuche");
 });
 
@@ -76,7 +76,7 @@ app.post('/login', jsonParser, function(req, res){
 		if(password == "admin"){
 			res.status(200).send("admin");
 		}
-		if(result == null){
+		else if(result == null){
 
 			res.status(404).send("Benutzer existiert nicht");
 		}
@@ -147,7 +147,7 @@ app.put("/users/:id", jsonParser, function(req, res){
 					'password':user.password
 					}});
 
-			res.status(200).send("User "+result.user_name+" geaendert!");
+			res.status(200).send("User geaendert!");
 		}
 	});
 });
@@ -203,9 +203,9 @@ app.post("/products", jsonParser, function(req, res){
 
 
 
-app.put("/products/:id", jsonParser, function(req, res){
+app.put("/products", jsonParser, function(req, res){
 	var product=req.body;
-	productCollection.findOne({_id: req.id}, function(err, result){
+	productCollection.findOne({produkt: product.produkt}, function(err, result){
 		if(err) throw err;
 		if(result == null) {
 			res.status(404).send("Produkt existiert nicht!");
@@ -213,12 +213,12 @@ app.put("/products/:id", jsonParser, function(req, res){
 		else {
 			productCollection.update({
 				'_id':result._id},{$set:{
-					'produkt':product.produkt,
-					'herkunft':product.herkunft,
-					'hersteller':product.hersteller,
-					'preis':product.preis,
-					'vorrat':product.vorrat
-					}});
+				'produkt':product.produkt,
+				'herkunft':product.herkunft,
+				'hersteller':product.hersteller,
+				'preis':product.preis,
+				'vorrat':product.vorrat
+				}});
 			res.status(200).send("Produkt geaendert!");
 		}
 	});
@@ -330,7 +330,7 @@ app.delete("/products/:id/basket/:pid", jsonParser, function(req, res){
 		else{
 			userCollection.update({_id: req.id}, {$pull: {"basket": {_id: req.pid}}}, function(err, doc){
 				if(err) throw err;
-				res.status(200).send(result.produkt+" aus Basket gelöscht");
+				res.status(200).send("yes");
 			});
 		}
 	});
@@ -385,7 +385,7 @@ app.get('/logic', jsonParser, function(req,res) {
 });
 
 
-app.post('/produktsuche/admin', jsonParser, function(req, res){
+app.post('/admin/produktsuche', jsonParser, function(req, res){
 	var produkt=req.body.produkt;
 
 	console.log("Suchen nach" +produkt);

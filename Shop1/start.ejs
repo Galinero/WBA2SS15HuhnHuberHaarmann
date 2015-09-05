@@ -24,11 +24,13 @@
 					  data: JSON.stringify(user),
 					  success: function(data){
 					  	if(data==201) alert("Benutzer existiert nicht!");
-					  	else if(data==202) alert("admin");
+					  	else if(data==202) {
+					  		alert("admin");
+					  		window.location.href = 'http://localhost:3001/admin/produktsuche';
+					  	}
 					  	else if(data==203) alert("Falsches PW");
 					  	else {
 					  		var neu = data.substr(1, data.length-2);
-					  		alert(neu);
 					  		window.location.href = 'http://localhost:3001/products/' + neu;
 					  	}
 					  }

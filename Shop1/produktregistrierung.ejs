@@ -4,26 +4,15 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
 		<script type="text/javascript">
 
-			function feuer(){
-				var produkt, hersteller, preis, herkunft, vorrat;
-
-						produkt=$("#produkt").val();
-						hersteller=$("#hersteller").val();
-						preis=$("#preis").val();
-						herkunft=$("#herkunft").val();
-						vorrat=$("#vorrat").val();
-
-						var product = new Object();
-					  // speichern der Temporären Variablen in die Object-Variable user
-					  	product.produkt=produkt;
-					  	product.hersteller=hersteller;
-					  	product.preis=preis;
-							product.herkunft=herkunft;
-							product.vorrat=vorrat;
-							product.gekauft=0;
-
-
-
+			function post()	{
+				var p = new Object();
+				p.produkt=$("#produkt").val();
+				p.hersteller=$("#hersteller").val();
+				p.preis=$("#preis").val();
+				p.herkunft=$("#herkunft").val();
+				p.vorrat=$("#vorrat").val();
+				p.gekauft=0;
+				
 				$.ajax({
 					  async: true,
 					  host: "localhost",
@@ -32,20 +21,44 @@
 					  dataType: 'json',
 					  type: 'post',
 					  contentType: 'application/json',
-					  data: JSON.stringify(product),
+					  data: JSON.stringify(p),
 					  success: function(data){
 					  	if(data==201) alert("Produkt existiert bereits!");
 					  	else {
 					  		var neu = data.substr(1, data.length-2);
-					  		alert("Produktregistrierung erfolgreich! ID:" +neu);
-					  		window.location.href = 'http://localhost:3001/products/';
+					  		alert("Produktregistrierung erfolgreich");
+					  		window.location.href = 'http://localhost:3001/admin/produktregistrierung';
 					  	}
 					  }
 				});
 			};
-
-
-
+			
+			function put() {
+				var p = new Object();
+				p.produkt=$("#produkt").val();
+				p.hersteller=$("#hersteller").val();
+				p.preis=$("#preis").val();
+				p.herkunft=$("#herkunft").val();
+				p.vorrat=$("#vorrat").val();
+				p.gekauft=0;
+				$.ajax({
+					  async: true,
+					  host: "localhost",
+					  port: 3001,
+					  url: '/products',
+					  dataType: 'json',
+					  type: 'put',
+					  contentType: 'application/json',
+					  data: JSON.stringify(p),
+					  success: function(data){
+					  	if(data==201) alert("Produkt existiert nicht!");
+					  	else {
+					  		alert("Produktaenderung erfolgreich");
+					  		window.location.href = 'http://localhost:3001/admin/produktregistrierung';
+					  	}
+					  }
+				});
+			};
 		</script>
 	</head>
 	<body>
@@ -58,7 +71,7 @@
 			<input type="number" id="vorrat" size="8" step="1" placeholder="Vorrat" required><br>
 
 
-			<input type="submit" id="sub" value="Registrieren" onClick="feuer();return false;"><br><br>
+			<input type="submit" id="sub" value="Registrieren" onClick="post();return false;"><input type="submit" id="sub" value="aktualisieren" onClick="put();return false;"><br><br>
 		</form>
 		<a href="/products/admin">Produkte</a>
 	</body>

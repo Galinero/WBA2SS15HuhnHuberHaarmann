@@ -366,7 +366,7 @@ app.get("/admin/produktregistrierung", function(req, res){
       var options = {
         host: "localhost",
         port: 3000,
-        path: "/produktregistrierung/admin",
+        path: "/admin/produktregistrierung",
         method:"GET",
         headers:{
           accept:"text/plain"
@@ -395,7 +395,7 @@ app.get("/admin/produktsuche", function(req, res){
       var options = {
         host: "localhost",
         port: 3000,
-        path: "/produktsuche/admin",
+        path: "/admin/produktsuche",
         method:"GET",
         headers:{
           accept:"text/plain"
@@ -416,13 +416,17 @@ app.get("/admin/produktsuche", function(req, res){
 });
 
 
-app.post("/admin/produktsuche", jsonParser, function(req, res, next){
-   var changedProduct = req.body;
+app.get("/admin/produktsuche/suche/:query", jsonParser, function(req, res, next){
+      fs.readFile("./productsn.ejs", {encoding:"utf-8"}, function(err, filestring){
+    if(err){
+      throw err;
+    } else{
+      var suche = req.body;
       var options = {
         host: "localhost",
         port: 3000,
-        path: "/produktsuche/admin",
-        method:"POST"
+        path: "/admin/produktsuche/?="+req.params.query,
+        method:"get"
       }
       var externalRequest = http.request(options, function(externalResponse){
         console.log("search product");
@@ -430,7 +434,14 @@ app.post("/admin/produktsuche", jsonParser, function(req, res, next){
         externalResponse.on("data", function(chunk){
           console.log(chunk);
           if(chunk=="Produkt existiert nicht!") res.end('201');
-          else res.end(JSON.stringify(chunk));
+          else {
+            var products = JSON.parse(chunk);
+            var html = ejs.render(filestring, {products: products, id: "admin"});
+            res.setHeader("content-type", "text/html");
+            res.writeHead(200);
+            res.write(html);
+            res.end()
+          }
           //res.end('200');
         });
       });
@@ -438,10 +449,14 @@ app.post("/admin/produktsuche", jsonParser, function(req, res, next){
         console.log('problem with request: ' + e.message);
       });
       externalRequest.setHeader("content-type", "application/json");
-      externalRequest.write(JSON.stringify(changedProduct));
-      console.log(JSON.stringify(changedProduct));
+      externalRequest.write(JSON.stringify(suche));
+      console.log(JSON.stringify(suche));
       externalRequest.end();
+    }
+    });
+      
 });
+
 
 
 

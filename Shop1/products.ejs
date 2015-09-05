@@ -5,27 +5,34 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
     <script type="text/javascript">
 
-      function feuer(var x){
-        alert(x);
+      function suche(){
+        
+        var product = new Object();
+        product.produkt=$("#produkt").val();;
+        alert(product.produkt);
         $.ajax({
             host: "localhost",
             port: 3001,
-            url: './basket/'+x,
-            dataType: 'json',
-            type: 'GET',
+            url: '/admin/produktsuche/suche/'+product.produkt,
+            type: 'get',
             success: function(data){
               if(data==201) alert("Produkt existiert nicht!");
-              else if(data==200) alert("Zum Warenkorb hinzugefügt");
+              else {
+                alert("Produkt gefunden!");
+              }
             }
         });
       };
-
 
 
     </script>
   </head>
   <body>
     <a href="<%- id%>/basket">Warenkorb</a><br><br>
+    <form id="form">
+      <input type="text" id="produkt" size="40" placeholder="Produkt" required><br>
+      <input type="submit" id="sub" value="Suchen" onClick="suche();"><br><br>
+    </form><br>
     <h1>Produkte</h1>
     <ul>
       <% for(var i = 0; i<products.length;i++){

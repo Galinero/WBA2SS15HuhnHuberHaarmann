@@ -60,11 +60,6 @@ app.get('/admin/produktregistrierung', function(req ,res){
 });
 
 
-app.get('/admin/produktsuche', function(req ,res){
-	res.status(200).send("Produktsuche");
-});
-
-
 app.post('/login', jsonParser, function(req, res){
 	var username=req.body.benutzer;
 	var password=req.body.passwort;
@@ -385,21 +380,20 @@ app.get('/logic', jsonParser, function(req,res) {
 });
 
 
-app.post('/admin/produktsuche', jsonParser, function(req, res){
-	var produkt=req.body.produkt;
-
-	console.log("Suchen nach" +produkt);
-	productCollection.findOne({produkt: produkt}, function(err, result){
-
-
+app.get('/admin/produktsuche/suche/:query', jsonParser, function(req, res){
+	var products = [];
+	console.log("Suchen nach " +req.params.query);
+	//var query = { FieldToSearch: new RegExp('^' + produkt)};
+	productCollection.find({"produkt" : req.params.query}).toArray(function(err, result) {
 		if(err) throw err;
-
 		if(result == null){
-
 			res.status(404).send("Produkt existiert nicht!");
 		}
 		else {
-				res.status(200).json(result._id);
+				for(var i = 0; i < result.length; i++){
+				products.push(result[i]);
+				}
+				res.status(200).json(products);
 
 			}
 

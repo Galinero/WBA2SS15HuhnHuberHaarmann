@@ -1,6 +1,12 @@
 <html>
 	<head>
 		<title>Produktaenderung</title>
+		   <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="styleproducts.css" type="text/css" rel="stylesheet" / > 
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
 		<script type="text/javascript">
 
@@ -89,12 +95,47 @@
 		</script>
 	</head>
 	<body>
-		<form id="form">
+		  <nav class="navbar navbar-default">
+      <div class="container-fluid">
+
+        <!-- logo -->
+        <div class="navbar-header">
+          <a href="#" class="navbar-brand">INTERNET SHOP</a>
+        </div>
+
+        <!-- menu items -->
+        <div>
+          <ul class="nav navbar-nav">
+            <li ><a href="<%- id%>/basket" id="warenkorb">Warenkorb</a></li>
+            <li> <a href="http://localhost:3001/users/<%- id%>">Profil</a></li>
+            <li> <a href="http://localhost:3001/logic/<%- id%>">meist gekaufte Produkte</a></li>
+            <li> <form id="form"  style="margin-left:20px;margin-top:12px;">
+      <input type="text" id="produkt" size="40" placeholder="Produkt" required>
+      <input type="submit" id="sub" value="Suchen" onClick="suche();">
+    </form> </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+      
+    <div class="container-fluid">
+
+
+    <div class="row">
+      <div class="col-md-1" ></div>
+      <div class="col-md-10" id="inhalt">
+    	<form id="form">
 			<input type="text" id="produkt" size="40" placeholder="Produktname" required><br>
 			<input type="submit" id="sub" value="Suchen" onClick="feuer();return false;"><br><br>
 		</form>
 
 
-		<a href="/products/admin">Produkte</a>
+		<a href="/products/admin" style="color:black">Produkte</a>
+
+
+
+  </div>
+  <div class="col-md-1" ></div>
+	
 	</body>
 </html>

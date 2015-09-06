@@ -178,6 +178,30 @@ app.post("/users", jsonParser, function(req, res, next){
       externalRequest.end();
 });
 
+//User löschen
+app.delete("/users/:id", jsonParser, function(req, res, next){
+      console.log("h");
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/users/"+req.params.id,
+        method:"DELETE"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          if(chunk=="Benutzer existiert nicht!") res.end('404');
+          else res.end('200');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.end();
+});
+
 //ProduktSeite++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 app.get("/products/:id", function(req, res, next){
@@ -557,6 +581,60 @@ app.post("/products/:id/basket", jsonParser, function(req, res, next){
       });
       externalRequest.setHeader("content-type", "application/json");
       externalRequest.end();
+});
+
+//Rechnungen++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//neue Rechnung
+
+app.post("/bill/:id", jsonParser, function(req, res, next){
+      console.log("alert");
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/bill/" + req.params.id,
+        method:"POST"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+         res.end(chunk);
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.end();
+});
+
+app.get("/bill/:id", function(req, res, next){
+  fs.readFile("./rechnung.ejs", {encoding:"utf-8"}, function(err, filestring){
+    if(err){
+      throw err;
+    } else{
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/bill/"+req.params.id,
+        method:"GET",
+        headers:{
+          accept:"application/json"
+        }
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+          externalResponse.on("data", function(chunk){
+          var user = JSON.parse(chunk);
+          var html = ejs.render(filestring, {user: user});
+          res.setHeader("content-type", "text/html");
+          res.writeHead(200);
+          res.write(html);
+          res.end();
+        });
+      });
+      externalRequest.end();
+    }
+  });
 });
 
 app.listen(3001, function(){

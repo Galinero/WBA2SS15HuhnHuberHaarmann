@@ -3,6 +3,25 @@
     <title><%= user.vorname %></title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
     <script type="text/javascript">
+
+      function feuer(){
+        var id = <%- JSON.stringify(user._id) %>;
+        alert(id);
+        $.ajax({
+            async: true,
+            host: "localhost",
+            port: 3001,
+            url: '/users/' + id,
+            type: 'delete',        
+            success: function(data){
+              if(data==404) alert("Nutzer existiert nicht!");
+              else {
+                alert("Auf Wiedersehen!");
+                window.location.href = 'http://localhost:3001/start';
+              }
+            }
+        });
+      };
             
       function put() {
         var u = new Object();
@@ -67,6 +86,7 @@
           <%= user.user_name%><input type="text" id="user" size="20"><br>
           Passwort: ********
           <input type="submit" id="s" value="aktualisieren" onClick="put(); return false;">
+          <input type="submit" id="sub" value="User entfernen!" onClick="feuer();return false;" ><br><br>
     </form>       
 
      <a href="http://localhost:3001/products/<%-user._id%>">Produkte</a>

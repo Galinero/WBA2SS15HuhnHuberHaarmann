@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title><%= user.vorname %></title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+    
+  </head>
+  <body>
+    <h1>Rechnung von Herr <%= user.vorname %> <%= user.nachname %></h1>
+    <form id="form"><br>
+          <%= user.vorname %><br>
+          <%= user.nachname %><br>
+         <%= user.strasse %>, <%= user.nr %><br>
+          <%= user.plz %> <%= user.stadt %><br><br>
+         
+         Rechnung<br>
+         -------------------------------------------------------
+          <% for(var i = 0; i<user.basket.length;i++){
+          %>
+         <%= user.basket[i].produkt %>-----------------<%= user.basket[i].preis %>€<br>
+         <%
+          }
+          %>
+    </form>       
+
+  </body>
+</html>

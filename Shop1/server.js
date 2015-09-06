@@ -93,6 +93,7 @@ app.post("/users", jsonParser, function(req, res){
 });
 
 app.get("/users/:id", jsonParser, function(req, res){
+	var user=req.body;
         userCollection.findOne({_id: req.id}, function(err, result){
 		if(err) throw err;
 		if(result == null) {
@@ -131,7 +132,7 @@ app.put("/users/:id", jsonParser, function(req, res){
 
 //löschen
 app.delete("/users/:id", jsonParser, function(req, res){
-	userCollection.findOne({_id:req.id}, function(err, result){
+	userCollection.findOne({_id: req.id}, function(err, result){
 		if(err) throw err;
 		if(result != null){
 			userCollection.remove({'_id':result._id});
@@ -165,6 +166,7 @@ app.get("/users", jsonParser, function(req, res){
 //neu hinzufügen
 app.post("/products", jsonParser, function(req, res){
 	var product=req.body;
+	console.log(product.produkt+"....."+product.hersteller);
 	productCollection.findOne({produkt: product.produkt}, function(err, result){
 		if(err) throw err;
 		if(result != null) {
@@ -231,7 +233,7 @@ app.get("/products/:id", jsonParser, function(req, res){
 
 //löschen
 app.delete('/products/:id', jsonParser, function(req, res){
-	productCollection.findOne({_id: ObjectId(req.id)}, function(err, result){
+	productCollection.findOne({_id: req.id}, function(err, result){
 		if(err) throw err;
 		if(result == null){
 			res.status(404).send("Produkt existiert nicht!");

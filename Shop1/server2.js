@@ -71,6 +71,8 @@ app.post("/login", jsonParser, function(req, res, next){
 //ProfilSeite++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 app.get("/users/:id", function(req, res, next){
+  //if(req.params.id = "styleproducts.css") res.end();
+  console.log(req.params.id);
   fs.readFile("./user.ejs", {encoding:"utf-8"}, function(err, filestring){
     if(err){
       throw err;
@@ -275,7 +277,6 @@ app.post("/products", jsonParser, function(req, res, next){
         method:"POST"
       }
       var externalRequest = http.request(options, function(externalResponse){
-        console.log("register products");
         externalResponse.setEncoding('utf8');
         externalResponse.on("data", function(chunk){
           console.log(chunk);
@@ -405,7 +406,6 @@ app.put("/products", jsonParser, function(req, res, next){
         method:"PUT"
       }
       var externalRequest = http.request(options, function(externalResponse){
-        console.log("change product");
         externalResponse.setEncoding('utf8');
         externalResponse.on("data", function(chunk){
           console.log(chunk);

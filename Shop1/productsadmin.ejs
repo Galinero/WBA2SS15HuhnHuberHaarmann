@@ -49,9 +49,6 @@
         <!-- menu items -->
         <div>
           <ul class="nav navbar-nav">
-            <li ><a href="<%- id%>/basket" id="warenkorb">Warenkorb</a></li>
-            <li> <a href="http://localhost:3001/users/<%- id%>">Profil</a></li>
-            <li> <a href="http://localhost:3001/logic/<%- id%>">meist gekaufte Produkte</a></li>
             <li> <form id="form" style="margin-left:20px;margin-top:12px;">
       <input type="text" id="produkt" size="40" placeholder="Produkt" required>
       <input type="submit" id="sub" value="Suchen" onClick="suche();">
@@ -94,7 +91,7 @@
           <li><%= products[i].produkt %></li>
           <li><%= products[i].herkunft %></li>
           <li><%= products[i].hersteller %></li>
-          <li><%= products[i].preis %></li>
+          <li><%= products[i].preis %>€</li>
           <input type="submit" value="aus Sortiment entfernen">
           </form>
           <%

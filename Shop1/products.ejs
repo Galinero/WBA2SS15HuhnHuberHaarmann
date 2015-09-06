@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Produkte</title>
-    <link href="styleproducts.css" type="text/css" rel="stylesheet" / > 
+    <link href="styleproducts.css" type="text/css" rel="stylesheet"> 
       <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -79,8 +79,8 @@
           <li><%= products[i].produkt %></li>
           <li><%= products[i].herkunft %></li>
           <li><%= products[i].hersteller %></li>
-          <li><%= products[i].preis %></li>
-          <li><input type="submit" value="zum Warenkorb hinzufügen"></li>
+          <li><%= products[i].preis %>€</li>
+          <input type="submit" value="zum Warenkorb hinzufügen">
           </form>
           <%
           }

@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname+'/'));
 app.use(bodyParser.urlencoded());
 
+//Login/Startseite
 
 app.get("/start", function(req, res){
   fs.readFile("./start.ejs", {encoding:"utf-8"}, function(err, filestring){
@@ -28,7 +29,7 @@ app.get("/start", function(req, res){
         }
       }
       var externalRequest = http.request(options, function(externalResponse){
-        externalResponse.on("data", function(chunk){
+          externalResponse.on("data", function(chunk){
           var html = ejs.render(filestring, chunk);
           res.setHeader("content-type", "text/html");
           res.writeHead(200);
@@ -42,7 +43,7 @@ app.get("/start", function(req, res){
 });
 
 app.post("/login", jsonParser, function(req, res, next){
-   var test = req.body;
+      var test = req.body;
       var options = {
         host: "localhost",
         port: 3000,
@@ -50,10 +51,8 @@ app.post("/login", jsonParser, function(req, res, next){
         method:"POST"
       }
       var externalRequest = http.request(options, function(externalResponse){
-        console.log("Connected User post");
-        externalResponse.setEncoding('utf8');
-        externalResponse.on("data", function(chunk){
-          console.log(chunk);
+          externalResponse.setEncoding('utf8');
+          externalResponse.on("data", function(chunk){
           if(chunk=="Benutzer existiert nicht") res.end('201');
           else if(chunk=="admin") res.end('202');
           else if(chunk=="Falsches Passwort!") res.end('203');
@@ -69,6 +68,7 @@ app.post("/login", jsonParser, function(req, res, next){
       externalRequest.end();
 });
 
+//ProfilSeite++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 app.get("/users/:id", function(req, res, next){
   fs.readFile("./user.ejs", {encoding:"utf-8"}, function(err, filestring){
@@ -85,10 +85,8 @@ app.get("/users/:id", function(req, res, next){
         }
       }
       var externalRequest = http.request(options, function(externalResponse){
-        externalResponse.on("data", function(chunk){
-
-      	  var user = JSON.parse(chunk);
-
+          externalResponse.on("data", function(chunk){
+          var user = JSON.parse(chunk);
           var html = ejs.render(filestring, {user: user});
           res.setHeader("content-type", "text/html");
           res.writeHead(200);
@@ -101,6 +99,32 @@ app.get("/users/:id", function(req, res, next){
   });
 });
 
+//Userdaten ändern
+app.put("/users/:id", jsonParser, function(req, res, next){
+   var changedUser = req.body;
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/users/"+req.params.id,
+        method:"PUT"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          console.log(chunk);
+          if(chunk=="User existiert nicht!") res.end('201');
+          else res.end(chunk);
+          //res.end('200');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.write(JSON.stringify(changedUser));
+      console.log(JSON.stringify(changedUser));
+      externalRequest.end();
+});
 
 app.get("/registrierung", function(req, res){
   fs.readFile("./registrierung.ejs", {encoding:"utf-8"}, function(err, filestring){
@@ -117,7 +141,7 @@ app.get("/registrierung", function(req, res){
         }
       }
       var externalRequest = http.request(options, function(externalResponse){
-        externalResponse.on("data", function(chunk){
+          externalResponse.on("data", function(chunk){
           var html = ejs.render(filestring, chunk);
           res.setHeader("content-type", "text/html");
           res.writeHead(200);
@@ -130,8 +154,9 @@ app.get("/registrierung", function(req, res){
   });
 });
 
+//neuen User registrieren
 app.post("/users", jsonParser, function(req, res, next){
-   var newUser = req.body;
+      var newUser = req.body;
       var options = {
         host: "localhost",
         port: 3000,
@@ -139,13 +164,10 @@ app.post("/users", jsonParser, function(req, res, next){
         method:"POST"
       }
       var externalRequest = http.request(options, function(externalResponse){
-        console.log("register user");
         externalResponse.setEncoding('utf8');
         externalResponse.on("data", function(chunk){
-          console.log(chunk);
           if(chunk=="Nutzer existiert bereits!") res.end('201');
           else res.end(JSON.stringify(chunk));
-          //res.end('200');
         });
       });
       externalRequest.on('error', function(e) {
@@ -153,42 +175,10 @@ app.post("/users", jsonParser, function(req, res, next){
       });
       externalRequest.setHeader("content-type", "application/json");
       externalRequest.write(JSON.stringify(newUser));
-      console.log(JSON.stringify(newUser));
       externalRequest.end();
 });
 
-app.get("/users", function(req, res, next){
-  fs.readFile("./users.ejs", {encoding:"utf-8"}, function(err, filestring){
-    if(err){
-      throw err;
-    } else{
-      var options = {
-        host: "localhost",
-        port: 3000,
-        path: "/users",
-        method:"GET",
-        headers:{
-          accept:"application/json"
-        }
-      }
-      var externalRequest = http.request(options, function(externalResponse){
-        console.log("get users:");
-        externalResponse.on("data", function(chunk){
-          var users = JSON.parse(chunk);
-          var html = ejs.render(filestring, {users: users});
-          res.setHeader("content-type", "text/html");
-          res.writeHead(200);
-          res.write(html);
-          res.end();
-        });
-      });
-      externalRequest.end();
-    }
-  });
-});
-
-
-
+//ProduktSeite++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 app.get("/products/:id", function(req, res, next){
   fs.readFile("./products.ejs", {encoding:"utf-8"}, function(err, filestring){
@@ -205,7 +195,6 @@ app.get("/products/:id", function(req, res, next){
         }
       }
       var externalRequest = http.request(options, function(externalResponse){
-        console.log("show products");
         externalResponse.on("data", function(chunk){
           var products = JSON.parse(chunk);
           var html = ejs.render(filestring, {products: products, id:req.params.id});
@@ -220,25 +209,26 @@ app.get("/products/:id", function(req, res, next){
   });
 });
 
-app.get("/logic/:id", function(req, res, next){
-  fs.readFile("./products.ejs", {encoding:"utf-8"}, function(err, filestring){
+//Admin++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+app.get("/admin/products", function(req, res, next){
+  fs.readFile("./productsadmin.ejs", {encoding:"utf-8"}, function(err, filestring){
     if(err){
       throw err;
     } else{
       var options = {
         host: "localhost",
         port: 3000,
-        path: "/logic",
+        path: "/products",
         method:"GET",
         headers:{
           accept:"application/json"
         }
       }
       var externalRequest = http.request(options, function(externalResponse){
-        console.log("get logic:");
         externalResponse.on("data", function(chunk){
           var products = JSON.parse(chunk);
-          var html = ejs.render(filestring, {products: products});
+          var html = ejs.render(filestring, {products: products, id:req.params.id});
           res.setHeader("content-type", "text/html");
           res.writeHead(200);
           res.write(html);
@@ -250,85 +240,8 @@ app.get("/logic/:id", function(req, res, next){
   });
 });
 
-app.get("/products/:id/basket/:pid", jsonParser, function(req, res, next){
 
-      var options = {
-        host: "localhost",
-        port: 3000,
-        path: "/products/"+req.params.id+"/basket/"+req.params.pid,
-        method:"GET"
-      }
-      var externalRequest = http.request(options, function(externalResponse){
-
-        externalResponse.setEncoding('utf8');
-        externalResponse.on("data", function(chunk){
-          console.log(chunk);
-          if(chunk=="Produkt existiert nicht") res.end('201');
-          else if(chunk=="yes") res.end('200');
-        });
-      });
-      externalRequest.on('error', function(e) {
-        console.log('problem with request: ' + e.message);
-      });
-      externalRequest.setHeader("content-type", "application/json");
-      externalRequest.end();
-});
-
-app.get('/products/:id/basket', jsonParser, function(req, res, next){
-  fs.readFile("./basket.ejs", {encoding:"utf-8"}, function(err, filestring){
-      if(err){
-        throw err;
-      } else{
-        var options = {
-          host: "localhost",
-          port: 3000,
-          path: "/users/"+req.params.id,
-          method:"GET",
-          headers:{
-            accept:"application/json"
-          }
-        }
-        var externalRequest = http.request(options, function(externalResponse){
-          externalResponse.on("data", function(chunk){
-
-            var user = JSON.parse(chunk);
-
-            var html = ejs.render(filestring, {user: user});
-            res.setHeader("content-type", "text/html");
-            res.writeHead(200);
-            res.write(html);
-            res.end();
-          });
-        });
-        externalRequest.end();
-      }
-    });
-});
-
-app.post("/products/:id/basket/:pid", jsonParser, function(req, res, next){
-
-      var options = {
-        host: "localhost",
-        port: 3000,
-        path: "/products/"+req.params.id+"/basket/"+req.params.pid,
-        method:"DELETE"
-      }
-      var externalRequest = http.request(options, function(externalResponse){
-
-        externalResponse.setEncoding('utf8');
-        externalResponse.on("data", function(chunk){
-          console.log(chunk);
-          if(chunk=="Produkt existiert nicht!") res.end('201');
-          else if(chunk=="yes") res.end('200');
-        });
-      });
-      externalRequest.on('error', function(e) {
-        console.log('problem with request: ' + e.message);
-      });
-      externalRequest.setHeader("content-type", "application/json");
-      externalRequest.end();
-});
-
+//Produkt registrieren
 app.post("/products", jsonParser, function(req, res, next){
    var newProduct = req.body;
       var options = {
@@ -415,7 +328,7 @@ app.get("/admin/produktsuche", function(req, res){
   });
 });
 
-
+//Produkt suchen (fehlerhaft!!)
 app.get("/admin/produktsuche/suche/:query", jsonParser, function(req, res, next){
       fs.readFile("./productsn.ejs", {encoding:"utf-8"}, function(err, filestring){
     if(err){
@@ -458,12 +371,7 @@ app.get("/admin/produktsuche/suche/:query", jsonParser, function(req, res, next)
 });
 
 
-
-
-
-
-
-
+//Produkt ändern
 app.put("/products", jsonParser, function(req, res, next){
    var changedProduct = req.body;
       var options = {
@@ -491,29 +399,163 @@ app.put("/products", jsonParser, function(req, res, next){
       externalRequest.end();
 });
 
-app.put("/users/:id", jsonParser, function(req, res, next){
-   var changedUser = req.body;
+//Produkt löschen
+app.post("/products/:id", jsonParser, function(req, res, next){
+
       var options = {
         host: "localhost",
         port: 3000,
-        path: "/users/"+req.params.id,
-        method:"PUT"
+        path: "/products/"+req.params.id,
+        method:"DELETE"
       }
       var externalRequest = http.request(options, function(externalResponse){
         externalResponse.setEncoding('utf8');
         externalResponse.on("data", function(chunk){
-          console.log(chunk);
-          if(chunk=="User existiert nicht!") res.end('201');
-          else res.end(chunk);
-          //res.end('200');
+          if(chunk=="Produkt existiert nicht!") res.end('404');
+          else res.end('200');
         });
       });
       externalRequest.on('error', function(e) {
         console.log('problem with request: ' + e.message);
       });
       externalRequest.setHeader("content-type", "application/json");
-      externalRequest.write(JSON.stringify(changedUser));
-      console.log(JSON.stringify(changedUser));
+      externalRequest.end();
+});
+
+//Programmlogik++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+app.get("/logic/:id", function(req, res, next){
+  fs.readFile("./products.ejs", {encoding:"utf-8"}, function(err, filestring){
+    if(err){
+      throw err;
+    } else{
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/logic",
+        method:"GET",
+        headers:{
+          accept:"application/json"
+        }
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+        externalResponse.on("data", function(chunk){
+          var products = JSON.parse(chunk);
+          var html = ejs.render(filestring, {products: products});
+          res.setHeader("content-type", "text/html");
+          res.writeHead(200);
+          res.write(html);
+          res.end();
+        });
+      });
+      externalRequest.end();
+    }
+  });
+});
+
+//Warenkorb++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//zum Warenkorb hinzufügen
+app.get("/products/:id/basket/:pid", jsonParser, function(req, res, next){
+
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/products/"+req.params.id+"/basket/"+req.params.pid,
+        method:"GET"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          console.log(chunk);
+          if(chunk=="Produkt existiert nicht") res.end('201');
+          else if(chunk=="yes") res.end('200');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.end();
+});
+
+app.get('/products/:id/basket', function(req, res, next){
+  fs.readFile("./basket.ejs", {encoding:"utf-8"}, function(err, filestring){
+      if(err){
+        throw err;
+      } else{
+        var options = {
+          host: "localhost",
+          port: 3000,
+          path: "/users/"+req.params.id,
+          method:"GET",
+          headers:{
+            accept:"application/json"
+          }
+        }
+        var externalRequest = http.request(options, function(externalResponse){
+          externalResponse.on("data", function(chunk){
+
+            var user = JSON.parse(chunk);
+            var html = ejs.render(filestring, {user: user});
+            res.setHeader("content-type", "text/html");
+            res.writeHead(200);
+            res.write(html);
+            res.end();
+          });
+        });
+        externalRequest.end();
+      }
+    });
+});
+
+//einzelne Position löschen
+app.post("/products/:id/basket/:pid", jsonParser, function(req, res, next){
+
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/products/"+req.params.id+"/basket/"+req.params.pid,
+        method:"DELETE"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          console.log(chunk);
+          if(chunk=="Produkt existiert nicht!") res.end('201');
+          else if(chunk=="yes") res.end('200');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
+      externalRequest.end();
+});
+
+//den ganzen Warenkorb löschen
+app.post("/products/:id/basket", jsonParser, function(req, res, next){
+
+      var options = {
+        host: "localhost",
+        port: 3000,
+        path: "/products/"+req.params.id+"/basket",
+        method:"DELETE"
+      }
+      var externalRequest = http.request(options, function(externalResponse){
+
+        externalResponse.setEncoding('utf8');
+        externalResponse.on("data", function(chunk){
+          if(chunk=="Basket gelöscht!") res.end('200');
+          else res.end('404');
+        });
+      });
+      externalRequest.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+      });
+      externalRequest.setHeader("content-type", "application/json");
       externalRequest.end();
 });
 

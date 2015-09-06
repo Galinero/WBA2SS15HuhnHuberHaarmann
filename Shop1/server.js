@@ -2,7 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var jsonParser = bodyParser.json();
-var nodemailer = require('nodemailer');
 
 var MongoClient = require('mongodb').MongoClient;
 var userCollection, productCollection, basketCollection;
@@ -15,25 +14,8 @@ var db = MongoClient.connect('mongodb://127.0.0.1:27017/shop', function(err, db)
 	productCollection = db.collection('productcollection');
 });
 
-var transporter = nodemailer.createTransport({
-	service: 'Hotmail',
-	auth: {
-		user: 'mail@hotmail.de',
-		pass: 'pass'
-	}
-});
-
-var mailOptions = {
-    from: 'Fred Foo <foo@blurdybloop.com>', // sender address
-    to: 'bar@blurdybloop.com, baz@blurdybloop.com', // list of receivers
-    subject: 'Hello', // Subject line
-    text: 'Hello world', // plaintext body
-    html: '<b>Hello world ✔</b>' // html body
-};
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-
-//Login-System
 
 app.param('id', function(req, res, next, id) {
 
@@ -59,6 +41,7 @@ app.get('/admin/produktregistrierung', function(req ,res){
 	res.status(200).send("Produktregistrierung");
 });
 
+//LoginSystem+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 app.post('/login', jsonParser, function(req, res){
 	var username=req.body.benutzer;
@@ -88,10 +71,9 @@ app.post('/login', jsonParser, function(req, res){
 	});
 });
 
+//User verwalten+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-
-
+//neu anlegen
 app.post("/users", jsonParser, function(req, res){
 
 	var user=req.body;
@@ -110,7 +92,6 @@ app.post("/users", jsonParser, function(req, res){
 });
 
 app.get("/users/:id", jsonParser, function(req, res){
-	var user=req.body;
         userCollection.findOne({_id: req.id}, function(err, result){
 		if(err) throw err;
 		if(result == null) {
@@ -122,7 +103,7 @@ app.get("/users/:id", jsonParser, function(req, res){
 	});
 });
 
-
+//ändern
 app.put("/users/:id", jsonParser, function(req, res){
 	var user=req.body;
 	userCollection.findOne({_id: req.id}, function(err, result){
@@ -147,8 +128,7 @@ app.put("/users/:id", jsonParser, function(req, res){
 	});
 });
 
-
-
+//löschen
 app.delete("/users/:id", jsonParser, function(req, res){
 	userCollection.findOne({_id:req.id}, function(err, result){
 		if(err) throw err;
@@ -178,8 +158,10 @@ app.get("/users", jsonParser, function(req, res){
 		res.status(200).json(users);
 	});
 });
-//Produkte verwalten
 
+//Produkte verwalten+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//neu hinzufügen
 app.post("/products", jsonParser, function(req, res){
 	var product=req.body;
 	productCollection.findOne({produkt: product.produkt}, function(err, result){
@@ -196,8 +178,7 @@ app.post("/products", jsonParser, function(req, res){
 	});
 });
 
-
-
+//ändern
 app.put("/products", jsonParser, function(req, res){
 	var product=req.body;
 	productCollection.findOne({produkt: product.produkt}, function(err, result){
@@ -247,39 +228,7 @@ app.get("/products/:id", jsonParser, function(req, res){
 	});
 });
 
-
-/*
-app.post('/productsearch', jsonParser, function(req, res){
-	var produktname=req.body.produkt;
-	var herstellername=req.body.hersteller;
-	//var herkunft=req.body.hersteller;
-	//var preis=req.body.preis;
-	//var vorrat=req.body.vorrat;
-
-	productCollection.findOne({produkt: produktname}, function(err, result){
-
-		if(err) throw err;
-
-		if(result == null){
-			console.log("Produkt nicht gefunden");
-			res.end("produkt");
-		}
-		else {
-			if(result.hersteller==herstellername){
-				console.log("Produkt gefunden: "+result.produkt+" "+result.hersteller+" "+result.herkunft+" "+result.preis+" "+result.vorrat);
-				res.end("Produkt gefunden, Produkt: "+result.produkt+" Hersteller: "+result.hersteller+" Herkunft: "+result.herkunft+" Preis: "+result.preis+" Vorrat: "+result.vorrat);
-				//res.end("yes");
-			}
-			else{
-				console.log("Hersteller nicht gefunden!");
-				res.end("hersteller");
-
-			}
-		}
-	});
-});
-*/
-
+//löschen
 app.delete('/products/:id', jsonParser, function(req, res){
 	productCollection.findOne({_id: ObjectId(req.id)}, function(err, result){
 		if(err) throw err;
@@ -297,7 +246,7 @@ app.delete('/products/:id', jsonParser, function(req, res){
 
 
 
-//Einkaufswagen verwalten
+//Warenkorb verwalten+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 app.get('/products/:id/basket/:pid', jsonParser, function(req, res){
 	productCollection.findOne({_id: req.pid}, function(err, result){
@@ -318,6 +267,7 @@ app.get('/products/:id/basket/:pid', jsonParser, function(req, res){
 	});
 });
 
+//einzelne Position löschen
 app.delete("/products/:id/basket/:pid", jsonParser, function(req, res){
 	productCollection.findOne({_id: req.pid}, function(err, result){
 		if(err) throw err;
@@ -333,6 +283,7 @@ app.delete("/products/:id/basket/:pid", jsonParser, function(req, res){
 
 });
 
+//ganzen Warenkorb löschen
 app.delete("/products/:id/basket", jsonParser, function(req, res){
 	userCollection.update({_id: req.id}, {$set: {"basket": []}}, function(err, doc){
 				if(err) throw err;
@@ -340,6 +291,7 @@ app.delete("/products/:id/basket", jsonParser, function(req, res){
 			});
 });
 
+//Anzahl ändern
 app.put('/products/:id/basket/:pid', jsonParser, function(req, res) {
 	var neu=req.body.anzahl;
 	if(neu != null){
@@ -359,6 +311,8 @@ app.put('/products/:id/basket/:pid', jsonParser, function(req, res) {
 	}
 });
 
+//Programmlogik+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 app.get('/logic', jsonParser, function(req,res) {
 	var products = [];
 	var gross;
@@ -376,27 +330,6 @@ app.get('/logic', jsonParser, function(req,res) {
 			}
 		}
 		res.status(200).json(products);
-	});
-});
-
-
-app.get('/admin/produktsuche/suche/:query', jsonParser, function(req, res){
-	var products = [];
-	console.log("Suchen nach " +req.params.query);
-	//var query = { FieldToSearch: new RegExp('^' + produkt)};
-	productCollection.find({"produkt" : req.params.query}).toArray(function(err, result) {
-		if(err) throw err;
-		if(result == null){
-			res.status(404).send("Produkt existiert nicht!");
-		}
-		else {
-				for(var i = 0; i < result.length; i++){
-				products.push(result[i]);
-				}
-				res.status(200).json(products);
-
-			}
-
 	});
 });
 

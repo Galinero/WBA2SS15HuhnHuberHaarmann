@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>meist gekaufte Produkte</title>
+    <link href="styleproducts.css" type="text/css" rel="stylesheet" / > 
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+  </head>
+  <body>
+    <div id="topBar"> Internet Shop 
+      <a href="http://localhost:3001/products/<%- id%>/basket" id="warenkorb">Warenkorb</a>
+      <a href="http://localhost:3001/users/<%- id%>">Profil</a>
+
+
+
+    </div>
+    <div id="inhalt">  
+
+     <div id="inhalt1">  
+    
+    <h1>Produkte</h1>
+    <ul>
+      <% for(var i = 0; i<products.length;i++){
+          %>
+          <form action="http://localhost:3001/products/<%- id%>/basket/<%-products[i]._id%>" method="GET" target="hiddenFrame">
+          <h2>Artikel <%= i+1 %> </h2>
+          <li><%= products[i].produkt %></li>
+          <li><%= products[i].herkunft %></li>
+          <li><%= products[i].hersteller %></li>
+          <li><%= products[i].preis %></li>
+          <li>wie oft gekauft: <%= products[i].gekauft %></li>
+          <li><input type="submit" value="zum Warenkorb hinzufügen"></li>
+          </form>
+          <%
+          }
+          %>
+    </ul>
+     <a href="http://localhost:3001/products/<%- id%>">Produkte</a>
+  <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
+</div>
+</div>
+  </body>
+</html>

@@ -425,7 +425,7 @@ app.post("/products/:id", jsonParser, function(req, res, next){
 //Programmlogik++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 app.get("/logic/:id", function(req, res, next){
-  fs.readFile("./products.ejs", {encoding:"utf-8"}, function(err, filestring){
+  fs.readFile("./products_sorted.ejs", {encoding:"utf-8"}, function(err, filestring){
     if(err){
       throw err;
     } else{
@@ -441,7 +441,7 @@ app.get("/logic/:id", function(req, res, next){
       var externalRequest = http.request(options, function(externalResponse){
         externalResponse.on("data", function(chunk){
           var products = JSON.parse(chunk);
-          var html = ejs.render(filestring, {products: products});
+          var html = ejs.render(filestring, {products: products, id: req.params.id});
           res.setHeader("content-type", "text/html");
           res.writeHead(200);
           res.write(html);

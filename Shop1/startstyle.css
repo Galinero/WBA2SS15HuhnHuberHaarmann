@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+body{margin:0px; font-family:"Trebuchet MS", Helvetica, sans-serif;}
+
+h1{font-family:"Trebuchet MS", Helvetica, sans-serif;}
+
+:link{color:white;}
+
+.div1{background-color:#545454;
+	font-family:"Trebuchet MS", Helvetica, sans-serif;
+		color: white;}
+
+
+#div01{width:100%;height:50px;text-align: center;font-size:30px;color:white;}
+
+#div02{width:100%;height:900px;
+		background-color:white;}
+
+#div03{margin-top:200px;width:300px;
+
+
+			display: block;
+    		margin-left: auto;
+    		margin-right: auto;
+    		text-align: center;}

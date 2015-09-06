@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>Registrierung</title>
+		<link href="styleregist.css" type="text/css" rel="stylesheet" / > 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
 		<script type="text/javascript">
 
@@ -54,18 +55,33 @@
 		</script>
 	</head>
 	<body>
-		<h1> Logins </h1>
+		<div id="topBar"> Internet Shop </div>
+		<div id="inhalt">  
+
+		<div  id="inhalt1">  
+		<h1> Registrierung</h1>
 		<form id="form">
+			<a> Vorname </a> <br>
 			<input type="TEXT" id="vorname" size="40" placeholder="Vorname" required><br>
+			<a> Name </a> <br>
 			<input type="text" id="nachname" size="40" placeholder="Nachname" required><br>
+			<a> Straße </a> <br>
 			<input type="text" id="strasse" size="40" placeholder="Straße" required>
+			<a> Straßennummer </a><br>
 			<input type="number" id="nr" size="4" placeholder="Nummer" required><br>
-			<input type="number" id="plz" size="7" placeholder="PLZ" required>
+			<a> Postleitzahl </a><br>
+			<input type="number" id="plz" size="7" placeholder="PLZ" required><br>
+			<a> Stadt </a><br>
 			<input type="text" id="stadt" size="40" placeholder="Stadt" required><br>
+			<a> Benutzername </a><br>
 			<input type="text" id="user" size="40" placeholder="Benutzername" required><br>
+			<a> Passwort </a><br>
 			<input type="password" id="password" size="40" placeholder="Passwort" required><br>
-			<input type="submit" id="sub" value="Registrieren" onClick="feuer();return false;"><br><br>
+			<br>
+			<input type="submit" id="sub" value="Registrieren" onClick="feuer();return false;" ><br><br>
 		</form>
 		<a href="/start">Login</a>
+	</div>
+</div>
 	</body>
 </html>

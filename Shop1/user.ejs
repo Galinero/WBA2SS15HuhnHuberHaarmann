@@ -66,8 +66,9 @@
           <%= user.plz %> <%= user.stadt %><input type="text" id="plz" size="10"><br><input type="text" id="stadt" size="10"><br>
           <%= user.user_name%><input type="text" id="user" size="20"><br>
           Passwort: ********
-          <%= JSON.stringify(user.basket[1].produkt)%>
           <input type="submit" id="s" value="aktualisieren" onClick="put(); return false;">
     </form>       
+
+     <a href="http://localhost:3001/products/<%-user._id%>">Produkte</a>
   </body>
 </html>

@@ -7,6 +7,23 @@
         window.location.href = "./basket";
         return true;
       }
+
+      function buy() {
+        var id = <%- JSON.stringify(user._id) %>;
+        alert(id);
+        $.ajax({
+            async: true,
+            host: "localhost",
+            port: 3001,
+            url: '/bill/' + id,
+            type: 'post',
+            success: function(data){
+              alert(data);
+                var neu = data.substr(1, data.length-2);
+                window.location.href = 'http://localhost:3001/bill/' + neu;
+            }
+        });
+      };
     </script>
    
   </head>
@@ -28,7 +45,7 @@
           }
           %>
     </ul>
-
+  <input type="submit" id="u" value="kaufen!" onClick="buy();return false;">
   <form action="http://localhost:3001/products/<%- user._id %>/basket" method="POST" target="hiddenFrame">
     <input type="submit" value="den ganzen Warenkorb entfernen" class="subs">
   </form>

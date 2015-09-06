@@ -12,6 +12,7 @@ var db = MongoClient.connect('mongodb://127.0.0.1:27017/shop', function(err, db)
 	console.log("connected to mongoDB!");
 	userCollection = db.collection('usercollection');
 	productCollection = db.collection('productcollection');
+	bills = db.collection('bills');
 });
 
 app.use(bodyParser.json());
@@ -76,7 +77,7 @@ app.post('/login', jsonParser, function(req, res){
 //neu anlegen
 app.post("/users", jsonParser, function(req, res){
 
-	var user=req.body;
+		var user=req.body;
         userCollection.findOne({user_name: user.user_name}, function(err, result){
 		if(err) throw err;
 		if(result != null) {
@@ -134,7 +135,7 @@ app.delete("/users/:id", jsonParser, function(req, res){
 		if(err) throw err;
 		if(result != null){
 			userCollection.remove({'_id':result._id});
-			res.status(200).send("Benutzer geloescht: "+result.user_name);
+			res.status(200).send("Benutzer geloescht");
 		}
 		else {
 			res.status(404).send("Benutzer existiert nicht!");
@@ -330,6 +331,39 @@ app.get('/logic', jsonParser, function(req,res) {
 			}
 		}
 		res.status(200).json(products);
+	});
+});
+
+//Rechnungen verwalten+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//neue Rechnung
+app.post("/bill/:id", jsonParser, function(req, res){
+			userCollection.findOne({_id: req.id}, function(err, result){
+				if(err) throw err;
+				if(result == null) {
+					res.status(404).send("Benutzer existiert nicht");
+				}
+				else {
+					bills.insert(result, function(err, doc){
+						if(err) throw err;
+						console.log(doc);
+						console.log(result._id);
+						res.status(200).json(result._id);
+					});
+				}
+			});
+});
+
+
+app.get("/bill/:id", jsonParser, function(req, res){
+        bills.findOne({_id: req.id}, function(err, result){
+		if(err) throw err;
+		if(result == null) {
+			res.status(404).send("Rechnung existiert nicht");
+		}
+		else {
+			res.status(200).json(result);
+		}
 	});
 });
 
